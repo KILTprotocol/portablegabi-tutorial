@@ -19,6 +19,8 @@ The verifier is not able to link two verification sessions to a single identity 
 
 **Verifier**: An entity which request sign properties from the claimer.
 
+**Accumulator**: The whitelist which contains all non revocation witnesses and can be used to prove that the credential was not revoked.
+
 ## Technical overview
 
 The cryptographic primitives of Portablegabi are implemented in [Gabi](https://github.com/privacybydesign/gabi) which is maintained by the [privacy by design foundation](https://privacybydesign.foundation/en/) and also used inside [IRMA](https://www.irmacard.org).
