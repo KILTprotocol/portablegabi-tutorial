@@ -6,6 +6,7 @@ If an attester revokes a credential he removes the associate witness from the wh
 Witnesses are added to the whitelist implicitly.
 Adding witnesses to the whitelist requires therefore no change.
 Since this whitelist is implemented using accumulators, it is called *accumulator*.
+Further documentation on how this accumulator works can be found in the [IRMA docs](https://irma.app/docs/revocation/#cryptography).
 
 ## Example
 
@@ -35,7 +36,7 @@ let credential = () => {
     // build credential
     // ...
     return credential
-}
+}()
 
 // credential is updated to accumulator 55, the newest accumulator has index 59
 const accumulators = [accumulator56, accumulator57, accumulator58, accumulator59]
