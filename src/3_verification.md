@@ -28,11 +28,9 @@ const {
 } = await GabiVerifier.requestPresentation({
     // specify which attributes should be disclosed
     requestedAttributes: ["age"],
-    // Specifies whether or not the claimer needs to provide a non revocation proof.
-    // A revocation proof adds some computational effort
-    reqNonRevocationProof: true,
-    // specifies the index of the oldest accumulator accepted.
-    reqMinIndex: index,
+    // The threshold for the age of the accumulator. If the accumulator was created before this date
+    // the proof will be rejected. Except if the accumulator is the newest available accumulator.
+    reqUpdatedAfter: new Date(),
 })
 
 // After the claimer has received the PresentationRequest he builds a Presentation:
@@ -50,9 +48,11 @@ const {
     verified,
 } = await GabiVerifier.verifyPresentation({
     // the presentation which was send over by the claimer
-    presentation,
+    proof: presentation,
     verifierSession,
     // the public key which was used by the attester to sign the credential
     attesterPubKey: attester.getPubKey(),
+    // This accumulator is used to check whether the claimer provided the newest available accumulator.
+    latestAccumulator: accumulator,
 })
 ```

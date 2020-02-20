@@ -21,12 +21,12 @@ Before an attester can create attestations, she has to generate a key pair and p
 ```ts
 // Build a new attester.
 // Generating a new key pair will take around 10-30 minutes.
-const attester = GabiAttester.buildFromScratch()
+const attester = GabiAttester.create()
 // create a new accumulator (which is used for revocation)
-let update = await gabiAttester.createAccumulator()
+let accumulator = await gabiAttester.createAccumulator()
 
 // Build a new claimer and generate a new master key.
-const claimer = GabiAttester.buildNewClaimer()
+const claimer = GabiClaimer.create()
 ```
 
 After the attester and claimer have both generated their keys, the attestation session can be initiated by the attester.
@@ -34,10 +34,8 @@ After the attester and claimer have both generated their keys, the attestation s
 ```ts
 // The attester initiates the attestation session:
 const {
-    // The message should be send over to the claimer.
-    startAttestationMsg,
-    // The session stores local session information for the attester.
-    attesterSession,
+    message: startAttestationMsg,
+    session: attestationSession,
 } = await attester.startAttestation()
 
 // the claimer answers with an attestation request
@@ -47,9 +45,7 @@ const claim = {
 }
 
 const {
-    // The message should be send over to the attester.
-    attestation: attestationRequest,
-    // The session stores information for the claimer.
+    message: attestationRequest,
     session: claimerSession,
 } = await claimer.requestAttestation({
     // The received attestation message
@@ -61,8 +57,10 @@ const {
 })
 
 // The attester should check the claim he is about to attest.
-const checkClaim = attestationRequest.getClaim()
-// if everything checks out the attest issues an attestation.
+const receivedClaim = attestationRequest.getClaim()
+// do checks on receivedClaim
+
+// if everything checks out the attester issues an attestation.
 const {
     // the attestation should be send over to the claimer.
     attestation,
@@ -72,7 +70,7 @@ const {
     attestationSession,
     attestationRequest,
     // The update is used to generate a non revocation witness
-    update,
+    accumulator,
 })
 
 // After the claimer has received his attestation he can build his credential

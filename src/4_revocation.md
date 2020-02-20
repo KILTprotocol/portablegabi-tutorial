@@ -20,17 +20,17 @@ const accumulator0 = await attester.createAccumulator()
 
 const accumulator1 = await attester.revokeAttestation({
   accumulator0,
-  // the list of witnesses associated with the credentials which should get revoked
+  // The list of witnesses associated with the credentials which should get revoked.
   [witness0, witness2, witness23]
 })
 // publish accumulator1...
 ```
 
 After a new accumulator has been published, all claimers should update their credential to the newest available accumulator.
-In order to update their credential the claimer needs the complete history of all new accumulator since his last update.
+In order to update the credential the claimer needs the complete history of all new accumulators since his last update.
 
 ```ts
-const claimer = await GabiClaimer.buildFromScratch()
+const claimer = await GabiClaimer.create()
 let credential = () => {
     // request attestation from attester
     // build credential
