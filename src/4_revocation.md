@@ -12,8 +12,10 @@ Further documentation on how this accumulator works can be found in the [IRMA do
 
 In order to revoke a credential, the attester needs his key pair, the witness for the credential he wants to revoke and the accumulator.
 
-```ts
-const attester = new GabiAttester(publicKey, privateKey)
+```js
+const portablegabi = require("@KILTprotocol/portablegabi")
+
+const attester = new portablegabi.GabiAttester(pubKey, privKey)
 const accumulator0 = await attester.createAccumulator()
 
 // issue attestations and store witnesses...
@@ -21,7 +23,7 @@ const accumulator0 = await attester.createAccumulator()
 const accumulator1 = await attester.revokeAttestation({
   accumulator0,
   // The list of witnesses associated with the credentials which should get revoked.
-  [witness0, witness2, witness23]
+  [witness0, witness2, witness3]
 })
 // publish accumulator1...
 ```
@@ -30,7 +32,7 @@ After a new accumulator has been published, all claimers should update their cre
 In order to update the credential the claimer needs the complete history of all new accumulators since his last update.
 
 ```ts
-const claimer = await GabiClaimer.create()
+const claimer = await portablegabi.GabiClaimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
 let credential = () => {
     // request attestation from attester
     // build credential
@@ -38,13 +40,11 @@ let credential = () => {
     return credential
 }()
 
+// How to update your credential?
 // credential is updated to accumulator 55, the newest accumulator has index 59
-const accumulators = [accumulator56, accumulator57, accumulator58, accumulator59]
-for (let acc in accumulators) {
-    credential = await claimer.updateCredential({
-        credential,
-        attesterPubKey: attestersPublicKey,
-        accumulator: acc,
-    })
+const newCredential = await credential.update({
+    attesterPubKey: attestersPublicKey,
+    accumulators: [accumulator56, accumulator57, accumulator58, accumulator59],
+})
 }
 ```
