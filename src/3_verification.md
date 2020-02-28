@@ -20,9 +20,16 @@ On the other hand, the verifier needs to trust the attester who signed the crede
 
 Actually, any accumulator of the attester would work but the it could be possible that the credential has been revoked recently. 
 Therefore, verifiers are incentivized to use the latest version. 
-However, in between the request, presentation and verification of the proof new versions of accumulators could be added to the chain. 
+
+### Timestamps
+
+However, new versions of accumulators could be added to the chain in between the request, presentation and verification of the proof. 
 Thus, a verifier has to commit to some *minimum timestamp* of the credential, which he can require as `reqUpdatedAfter` when requesting a presentation. 
-The credential then potentially needs to be updated with `.update` before the claimer can build the presentation in `buildPresentation`. If a claimer a claimer submits a presentation with a valid credential but a timestamp lower than the required one, the verification will fail!
+The credential then potentially needs to be updated with `.update` before the claimer can build the presentation in `buildPresentation`. An error will be thrown in `buildPresentation` when the claimer's credential's timestamp is lower than the requested one.
+
+Obviously, a verifier should rather commit to a specific accumulator instead of a timestamp. However, since the verifier starts a verification session, he does (and also should) not know who attested the credential(s) which are about to be presented by the claimer.
+
+## Example
 
 ```ts
 const portablegabi = require("@KILTprotocol/portablegabi")
@@ -32,6 +39,10 @@ const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease qua
 const credential = new portablegabi.Credential('<The credential created during the attestation>')
 const accumulator = new portablegabi.Accumulator('<The accumulator created during the attestation>')
 const pubKey = new portablegabi.AttesterPublicKey('<Public key of the attester>')
+
+// get the accumulator's timestamp to be used in requestPresentation
+// note: in the real world, the verifier could not know the exact timestamp as the attester is unknown to the verifier
+const accumulatorTimestamp = await accumulator.getDate(pubKey)
 
 // the verifier request a presentation
 const {
@@ -45,7 +56,7 @@ const {
     // the threshold for the age of the accumulator
     // if the accumulator was created before this date, the proof will be rejected
     // except if the accumulator is the newest available accumulator
-    reqUpdatedAfter: new Date(),
+    reqUpdatedAfter: accumulatorTimestamp,
 })
 
 // after the claimer has received the presentationRequest, he builds a presentation:

@@ -136,24 +136,41 @@ async function exec() {
   );
 
   /** (4) Verification phase */
-  const timeAfterRev = new Date();
+  // get the exact timestamp of the revocation for simplicity
+  const timeAtRev = await accumulator1.getDate(attester.publicKey);
 
   // (4.1) verifier sends nonce and context to claimer + requests disclosed attributes
-  // note: the requested timestamp is after revocation
+  // note: the requested timestamp at revocation
   const {
     session: verifierSession,
     message: presentationReq
   } = await portablegabi.Verifier.requestPresentation({
     requestedAttributes: ["age", "drivers_license.category"],
-    reqUpdatedAfter: timeAfterRev
+    reqUpdatedAfter: timeAtRev
   });
 
   // (4.2) claimer builds presentation with revoked credential
-  const presentation = await claimer.buildPresentation({
-    credential,
-    presentationReq,
-    attesterPubKey: attester.publicKey
-  });
+  // note: he needs to update as the credential was build before timeAtRev
+  const presentation = await claimer
+    .buildPresentation({
+      credential,
+      presentationReq,
+      attesterPubKey: attester.publicKey
+    })
+    .catch(() => {
+      console.log(
+        "Caught expected error when building presentation due to credential not matching the required timestamp"
+      );
+      const updatedCredential = credential.updateFromChain({
+        attesterPubKey: attester.publicKey,
+        attesterChainAddress: attester.address
+      });
+      return claimer.buildPresentation({
+        credential: updatedCredential,
+        presentationReq,
+        attesterPubKey: attester.publicKey
+      });
+    });
 
   // (4.3) verifier checks presentation for non revocation, valid data and matching attester's public key
   // expect success because credential is still valid in accumulator0
@@ -175,15 +192,18 @@ async function exec() {
     latestAccumulator: accumulator1
   });
   console.log(
-    "Cred verified w/ timestamp after revocation and old accumulator? Expected true, received",
+    "Cred verified w/ timestamp at revocation and old accumulator? Expected true, received",
     verifiedRev0
   );
   console.log(
-    "Cred verified w/ timestamp after revocation and new accumulator? Expected false, received",
+    "Cred verified w/ timestamp at revocation and new accumulator? Expected false, received",
     verifiedRev1
   );
 }
-exec().finally(() => process.exit(1));
+exec()
+  .catch(e => console.log(e))
+  .finally(() => process.exit(1));
+
 
 ```
 
