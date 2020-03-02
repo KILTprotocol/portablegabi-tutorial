@@ -1,8 +1,24 @@
 # Getting Started
 
-To get started you need to install [node](https://nodejs.org/en/), [yarn](https://yarnpkg.com/getting-started), [go](https://golang.org/doc/install), [go dep](https://github.com/golang/dep) and [rust](https://rustup.rs).
-Make sure you [setup your](https://github.com/golang/go/wiki/SettingGOPATH) `GOPATH` and `GOBIN` directories and environment variables.
-After everything is setup clone the [portablegabi project](https://github.com/KILTprotocol/portablegabi) into the correct go path.
+Unfortunately, you cannot immediately play around with the API and first have to set up a few things.
+
+### Required dependencies 
+
+To get started you need to have the following dependencies installed:
+- [node](https://nodejs.org/en/)
+- [yarn](https://yarnpkg.com/getting-started)
+- [go](https://golang.org/doc/install)
+- [go dep](https://github.com/golang/dep)
+
+Make sure you [set up your](https://github.com/golang/go/wiki/SettingGOPATH) `GOPATH` and `GOBIN` directories and environment variables.
+ 
+#### Optional: Test with Substrate chain
+
+If you want test the examples with a blockchain, you will also need to install [rust](https://rustup.rs) and [Substrate](https://substrate.dev/docs/en/getting-started/installing-substrate). For more information about setting up a chain to be used with the Portablegabi API, see the exemplary [`portablegabi-node`](https://github.com/KILTprotocol/portablegabi-node). For code examples of the Portablegabi chain API, please have a look at our [chain examples](https://github.com/KILTprotocol/portablegabi/tree/develop/docs/examples). 
+
+### Build Portablegabi
+
+After you are done, clone the [portablegabi project](https://github.com/KILTprotocol/portablegabi) into the correct go path.
 
 ```bash
 mkdir -p $GOPATH/src/github.com/KILTprotocol/
@@ -11,7 +27,7 @@ git clone https://github.com/KILTprotocol/portablegabi.git \
 cd $GOPATH/src/github.com/KILTprotocol/portablegabi
 ```
 
-Install all the dependencies, build the portablegabi WASM and compile the typescript code.
+Install all the dependencies, build the Portablegabi WASM and compile the typescript code.
 
 ```bash
 yarn install
@@ -21,36 +37,45 @@ yarn build
 Now you can execute the example to ensure everything worked fine.
 
 ```bash
-ts-node docs/example.ts
+yarn ts-node docs/examples/exampleSingle.ts
 ```
 
-You can use the portablegabi version you just build by running `yarn link` inside the portablegabi project and `yarn link @kiltprotocol/portablegabi` in the project where you want to use portablegabi.
+You can use the Portablegabi version you have just built by running `yarn link` inside the Portablegabi project and `yarn link @kiltprotocol/portablegabi` in the project where you want to use Portablegabi.
 
-## Add portablegabi as dependency
+## Add Portablegabi as dependency
 
-To use the portablegabi module which is published to npm, use either npm or yarn to add it to your dependencies:
+To use the Portablegabi module which is published to npm, use either npm or yarn to add it to your dependencies:
 
 - `npm install @kiltprotocol/portablegabi`
 - `yarn add @kiltprotocol/portablegabi`
 
-## Setup a tutorial project
+## Set up a tutorial project
 
-If you want to try out the examples inside this tutorial, create a new project and add portablegabi as a dependency (either by using `yarn add` or `yarn link`)
+If you want to try out the examples inside this tutorial, create a new project and add Portablegabi as a dependency (either by using `yarn add` or `yarn link`)
 
 ```bash
 mkdir portablegabi-rocks
 cd portablegabi-rocks
 yarn init -y
 yarn add @kiltprotocol/portablegabi
-# or if you have build and linked portablegabi by yourself:
+# or if you have build and linked Portablegabi by yourself:
 yarn link @kiltprotocol/portablegabi
 ```
 
 ## Run the examples
 
-Since most of the portablegabi functions are 
+Since most of the Portablegabi functions are asynchronous (due to calling the WASM in a callback-fashion), you need to wrap the examples inside an asynchronous function which you call in the end. Note: If you run the examples in Typescript and have version [3.8+](https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/) installed, you won't be required to do this due to the added top-level `await`.
 
-Example keys which can be used to speed up the examples:
+```js
+async function exec() {
+   // Portable gabi example functions...
+}
+exec()
+```
+
+The creation of attester keys can take 10 to 30 minutes in javascript. 
+Therefore, we recommend using the following example keys which to speed up the process.
+Note that you should never use this keys in production.
 
 ```js
 const privKey = new portablegabi.AttesterPrivateKey(
