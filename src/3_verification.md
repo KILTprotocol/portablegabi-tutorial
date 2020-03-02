@@ -40,10 +40,6 @@ const credential = new portablegabi.Credential('<The credential created during t
 const accumulator = new portablegabi.Accumulator('<The accumulator created during the attestation>')
 const pubKey = new portablegabi.AttesterPublicKey('<Public key of the attester>')
 
-// get the accumulator's timestamp to be used in requestPresentation
-// note: in the real world, the verifier could not know the exact timestamp as the attester is unknown to the verifier
-const accumulatorTimestamp = await accumulator.getDate(pubKey)
-
 // the verifier request a presentation
 const {
     // local information used to verify the presentation later
@@ -56,7 +52,7 @@ const {
     // the threshold for the age of the accumulator
     // if the accumulator was created before this date, the proof will be rejected
     // except if the accumulator is the newest available accumulator
-    reqUpdatedAfter: accumulatorTimestamp,
+    reqUpdatedAfter: new Date(),
 })
 
 // after the claimer has received the presentationRequest, he builds a presentation:

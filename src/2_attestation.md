@@ -1,6 +1,7 @@
 # Attestation
 
-During the attestation, the attester first signs a claim. Then, she sends the signature over to the claimer who builds his credential using the claim and the signature.
+During the attestation, the attester first signs a claim.
+Then, she sends the signature over to the claimer who builds his credential using the claim and the signature.
 
 ```mermaid
 sequenceDiagram
