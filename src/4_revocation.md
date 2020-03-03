@@ -1,0 +1,48 @@
+# Revocation
+
+An attester can revoke any credential she attested.
+This is done using a witness which is contained inside a credential and a whitelist containing all non-revoked witnesses.
+If an attester revokes a credential, she removes the associated witness from the whitelist and publishes a new version of this whitelist.
+Note that witnesses are added to the whitelist implicitly.
+Therefore, adding witnesses to the whitelist requires no change.
+Since this whitelist is implemented using accumulators, it is called *accumulator*.
+Further documentation on how this accumulator works can be found in the [IRMA docs](https://irma.app/docs/revocation/#cryptography).
+
+## Example
+
+In order to revoke a credential, the attester needs her key pair, the witness of credential she wants to revoke (created in `issueAttestation`) and the accumulator.
+
+```js
+const portablegabi = require("@KILTprotocol/portablegabi")
+
+const attester = new portablegabi.Attester(pubKey, privKey)
+const accumulator0 = await attester.createAccumulator()
+
+// issue attestations and store witnesses...
+const accumulator1 = await attester.revokeAttestation({
+  accumulator: accumulator0,
+  // the list of witnesses associated with the credentials which should get revoked
+  witnesses: [witness0, witness2, witness3]
+})
+// publish accumulator1...
+```
+
+After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to her newest available accumulator.
+In order to update the credential, the claimer needs the complete history of all new accumulators since his last update.
+
+```ts
+const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
+let credential = () => {
+    // request attestation from attester
+    // build credential
+    // ...
+    return credential
+}()
+
+// How to update your credential?
+// credential is updated to accumulator 55, the newest accumulator has index 59
+const newCredential = await credential.update({
+    attesterPubKey: attestersPublicKey,
+    accumulators: [accumulator56, accumulator57, accumulator58, accumulator59],
+})
+```

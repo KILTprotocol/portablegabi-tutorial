@@ -1,0 +1,18 @@
+[book]
+title = "Portablegabi Tutorial"
+authors = ['KILT <info@kilt.io>']
+language = "en"
+multilingual = false
+src = "src"
+
+[output.html]
+git-repository-url = "https://github.com/KILTprotocol/portablegabi"
+additional-css = ["mermaid.css"]
+additional-js = ["mermaid.min.js", "mermaid-init.js", "highlight.js"]
+
+[output.html.fold]
+enable = true
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+renderer = ["html"]
