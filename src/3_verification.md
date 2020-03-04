@@ -41,41 +41,41 @@ const credential = new portablegabi.Credential('<The credential created during t
 const accumulator = new portablegabi.Accumulator('<The accumulator created during the attestation>')
 const pubKey = new portablegabi.AttesterPublicKey('<Public key of the attester>')
 
-// the verifier request a presentation
+// The verifier request a presentation.
 const {
-    // local information used to verify the presentation later
+    // Local information used to verify the presentation later.
     session: verifierSession,
-    // the request which should be sent to the claimer containing the requested attributes
+    // The request which should be sent to the claimer containing the requested attributes.
     message: presentationReq,
 } = await portablegabi.Verifier.requestPresentation({
-    // specify which attributes should be disclosed
+    // Specify which attributes should be disclosed.
     requestedAttributes: ["age"],
-    // the threshold for the age of the accumulator
-    // if the accumulator was created before this date, the proof will be rejected
-    // except if the accumulator is the newest available accumulator
+    // The threshold for the age of the accumulator.
+    // If the accumulator was created before this date, the proof will be rejected
+    // except if the accumulator is the newest available accumulator.
     reqUpdatedAfter: new Date(),
 })
 
-// after the claimer has received the presentationRequest, they build a presentation:
+// After the claimer has received the presentationRequest, they build a presentation:
 const presentation = await claimer.buildPresentation({
     credential,
     presentationReq,
     attesterPubKey: pubKey,
 })
 
-// the presentation is sent over to the verifier who validates the proof and extracts the claim
+// The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {
-    // the contained claim, this value is undefined if the proof could not be validated
+    // The contained claim, this value is undefined if the proof could not be validated.
     claim,
-    // a boolean which indicates whether the presentation was valid
+    // A boolean which indicates whether the presentation was valid.
     verified,
 } = await portablegabi.Verifier.verifyPresentation({
-    // the presentation which was sent over by the claimer
+    // The presentation which was sent over by the claimer.
     proof: presentation,
     verifierSession,
-    // the public key which was used by the attester to sign the credential
+    // The public key which was used by the attester to sign the credential.
     attesterPubKey: pubKey,
-    // this accumulator is used to check whether the claimer provided the newest available accumulator
+    // This accumulator is used to check whether the claimer provided the newest available accumulator.
     latestAccumulator: accumulator,
 })
 console.log('Claim: ', claim)
