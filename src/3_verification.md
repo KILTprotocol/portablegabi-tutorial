@@ -1,7 +1,7 @@
 # Verification
 
 During the verification, the verifier requests a set of attributes from the claimer. 
-The claimer discloses his attributes and provides a proof (referred to as presentation).
+The claimer discloses their attributes and provides a proof (referred to as presentation).
 The verifier can then validate that the attributes are signed by a trusted attester using the claimer's presentation.
 
 ```mermaid
@@ -16,19 +16,19 @@ sequenceDiagram
 ```
 
 The claimer is required to have both a credential and the public key of the attester who signed it.
-On the other hand, the verifier needs to trust the attester who signed the credential and her latest accumulator. 
+On the other hand, the verifier needs to trust the attester who signed the credential and their latest accumulator. 
 
 ### Timestamps
 
 However, new versions of accumulators could be added to the chain quite frequently.
-The worst case would be, that the claimer needs to update his credential before every verification.
-To prevent this, a verifier can signal the claimer that he accepts not only the newest accumulator, but also accumulators which where created after a certain time. This timestamp is set using the `reqUpdatedAfter` parameter.
+The worst case would be, that the claimer needs to update their credential before every verification.
+To prevent this, a verifier can signal the claimer that they accept not only the newest accumulator, but also accumulators which where created after a certain time. This timestamp is set using the `reqUpdatedAfter` parameter.
 If the verifier sends the current time, the claimer most likely has to check for the newest accumulator.
-During the verification the verifier needs to decide what he thinks is the latest accumulator.
+During the verification the verifier needs to decide what they think is the latest accumulator.
 This is done using the `latestAccumulator` parameter.
 If the claimer sends a newer accumulator than `latestAccumulator` the verifier accepts this accumulator.
 
-In short: the verifier accepts an accumulator if it is newer than the newest accumulator he knows of or if it was created after `reqUpdatedAfter`.
+In short: the verifier accepts an accumulator if it is newer than the newest accumulator they know of or if it was created after `reqUpdatedAfter`.
 
 ## Example
 
@@ -56,7 +56,7 @@ const {
     reqUpdatedAfter: new Date(),
 })
 
-// after the claimer has received the presentationRequest, he builds a presentation:
+// after the claimer has received the presentationRequest, they build a presentation:
 const presentation = await claimer.buildPresentation({
     credential,
     presentationReq,

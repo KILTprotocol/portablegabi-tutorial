@@ -30,14 +30,14 @@ Gabi makes use of [CL-Signatures](https://dl.acm.org/doi/10.5555/1766811.1766838
 
 Portablegabi provides a protocol for [attestation](2_attestation.md) and [verification](3_verification.md) of claims.
 The main goals of Portablegabi are *selective disclosure* and *unlinkability*.
-*Selective disclosure* enables the claimer to only present a subset of the information contained inside his attested JSON object.
+*Selective disclosure* enables the claimer to only present a subset of the information contained inside their attested JSON object.
 The *unlinkability* feature hinders the verifier to link two verification sessions of the same claimer together.
-The claimer can interact with the same verifier multiple times without the verifier being able to tell if he talked to the same claimer. Please note that this only holds true if the claimer does not reveal attributes which uniquely identify him. Otherwise, the verifier would be able to link multiple sessions together.
+The claimer can interact with the same verifier multiple times without the verifier being able to tell if they talked to the same claimer. Please note that this only holds true if the claimer does not reveal attributes which uniquely identify him. Otherwise, the verifier would be able to link multiple sessions together.
 
 The library also provides a scheme to support revocation of attestations using a distributed ledger.
 Each attestation contains a non-revocation witness which proves that the attestation is still valid and has not been revoked.
 Every witness is by default contained inside a mathematical accumulator which is written on a blockchain.
-If the attester wishes to revoke an attestation, he removes the witness from the accumulator and updates the blockchain with the new accumulator.
+If the attester wishes to revoke an attestation, they remove the witness from the accumulator and updates the blockchain with the new accumulator.
 
 ## Architecture of Portablegabi
 
