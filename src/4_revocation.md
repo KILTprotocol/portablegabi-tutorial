@@ -1,8 +1,8 @@
 # Revocation
 
-An attester can revoke any credential she attested.
+An attester can revoke any credential they attested.
 This is done using a witness which is contained inside a credential and a whitelist containing all non-revoked witnesses.
-If an attester revokes a credential, she removes the associated witness from the whitelist and publishes a new version of this whitelist.
+If an attester revokes a credential, they remove the associated witness from the whitelist and publishes a new version of this whitelist.
 Note that witnesses are added to the whitelist implicitly.
 Therefore, adding witnesses to the whitelist requires no change.
 Since this whitelist is implemented using accumulators, it is called *accumulator*.
@@ -10,7 +10,7 @@ Further documentation on how this accumulator works can be found in the [IRMA do
 
 ## Example
 
-In order to revoke a credential, the attester needs her key pair, the witness of credential she wants to revoke (created in `issueAttestation`) and the accumulator.
+In order to revoke a credential, the attester needs their key pair, the witness of credential they want to revoke (created in `issueAttestation`) and the accumulator.
 
 ```js
 const portablegabi = require("@KILTprotocol/portablegabi")
@@ -27,8 +27,8 @@ const accumulator1 = await attester.revokeAttestation({
 // publish accumulator1...
 ```
 
-After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to her newest available accumulator.
-In order to update the credential, the claimer needs the complete history of all new accumulators since his last update.
+After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to their newest available accumulator.
+In order to update the credential, the claimer needs the complete history of all new accumulators since their last update.
 
 ```ts
 const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')

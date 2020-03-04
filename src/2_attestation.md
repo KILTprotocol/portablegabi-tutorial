@@ -1,7 +1,7 @@
 # Attestation
 
 During the attestation, the attester first signs a claim.
-Then, she sends the signature over to the claimer who builds his credential using the claim and the signature.
+Then, they send the signature over to the claimer who builds their credential using the claim and the signature.
 
 ```mermaid
 sequenceDiagram
@@ -10,14 +10,14 @@ sequenceDiagram
 
     note left of A: The attester chooses two random numbers (context and nonce) and sends them to the claimer.
     A->>C: Initiate Attestation
-    note right of C: The claimer commits on his master secret and send his claim to the attester.
+    note right of C: The claimer commits on their master secret and send their claim to the attester.
     C->>A: Attestation Request
     note left of A: The attester validates and signs the claim and sends the signature back to the claimer.
     A->>C: Attestation Response
-    note right of C: The claimer builds his credential using the signature.
+    note right of C: The claimer builds their credential using the signature.
 ```
 
-Before an attester can create attestations, she has to generate a key pair and publish her public key.
+Before an attester can create attestations, they have to generate a key pair and publish their public key.
 
 ```ts
 const portablegabi = require("@KILTprotocol/portablegabi")
@@ -59,33 +59,33 @@ const {
     message: attestationRequest,
     session: claimerSession,
 } = await claimer.requestAttestation({
-    // the received attestation message
+    // The received attestation message.
     startAttestationMsg,
-    // the claim which should get attested.
+    // The claim which should get attested.
     claim,
-    // the public key of the attester.
+    // The public key of the attester.
     attesterPubKey: attester.publicKey,
 })
 
-// the attester should check the claim she is about to attest
+// The attester should check the claim they are about to attest.
 const receivedClaim = attestationRequest.getClaim()
 
-// do checks on receivedClaim
-// if everything checks out the attester issues an attestation
+// Do checks on receivedClaim.
+// If everything checks out the attester issues an attestation.
 const {
-    // the attestation should be sent over to the claimer
+    // The attestation should be sent over to the claimer.
     attestation,
-    // the witness should be stored for later revocation
+    // The witness should be stored for later revocation.
     witness
 } = await attester.issueAttestation({
     attestationSession,
     attestationRequest,
-    // the update is used to generate a non-revocation witness
+    // The update is used to generate a non-revocation witness.
     accumulator,
 })
 console.log("Witness: ", witness.valueOf())
 
-// after the claimer has received his attestation, he can build his credential
+// After the claimer has received their attestation, they can build their credential.
 const credential = await claimer.buildCredential({
     claimerSession,
     attestation,
@@ -93,4 +93,4 @@ const credential = await claimer.buildCredential({
 console.log("Credential: ", credential.valueOf())
 ```
 
-Upon completion of an attestation session, the attester receives a witness which can be used to revoke the attestation and the claimer receives a credential with which he can generate presentations for an arbitrary amount of verifiers.
+Upon completion of an attestation session, the attester receives a witness which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.

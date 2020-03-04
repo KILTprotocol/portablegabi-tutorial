@@ -5,7 +5,7 @@ The advantages of using a blockchain are, that you have a decentralized database
 Would each attester operate their own servers for providing accumulators, these servers become a single point of failure.
 If a server is not reachable the verifier cannot check if a credential was recently revoked.
 Another concern of a centralised approach is the privacy of the claimer.
-Since the attester operates the server where the accumulator is stored, she can also track how often a claimer updates their credential.
+Since the attester operates the server where the accumulator is stored, they can also track how often a claimer updates their credential.
 A blockchain can prevent attesters from tracking claimers and provides a redundant storage.
 
 ### Build the chain
@@ -159,7 +159,7 @@ async function exec() {
   });
 
   // (4.2) claimer builds presentation with revoked credential
-  // note: he needs to update as the credential was build before timeAtRev
+  // note: they need to update as the credential was build before timeAtRev
   const presentation = await claimer
     .buildPresentation({
       credential,
