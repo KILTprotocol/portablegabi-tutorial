@@ -1,8 +1,8 @@
 # Development
 
-If you want to help develop portablegabi we would be glad to merge your pull request.
-But first you need to set up a development environment for our project.
-For that start with installing the following dependencies:
+If you want to help develop portablegabi, we would be glad to merge your pull request.
+But first, you need to set up a development environment for our project.
+For that, start with installing the following dependencies:
 
 - [node](https://nodejs.org/en/) (any version starting with 10.19)
 - [yarn](https://yarnpkg.com/getting-started)
