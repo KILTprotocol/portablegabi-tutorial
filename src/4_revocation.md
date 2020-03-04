@@ -18,13 +18,13 @@ const portablegabi = require("@KILTprotocol/portablegabi")
 const attester = new portablegabi.Attester(pubKey, privKey)
 const accumulator0 = await attester.createAccumulator()
 
-// issue attestations and store witnesses...
+// Issue attestations and store witnesses.
 const accumulator1 = await attester.revokeAttestation({
   accumulator: accumulator0,
-  // the list of witnesses associated with the credentials which should get revoked
+  // The list of witnesses associated with the credentials which should get revoked.
   witnesses: [witness0, witness2, witness3]
 })
-// publish accumulator1...
+// Publish accumulator1.
 ```
 
 After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to their newest available accumulator.
@@ -33,14 +33,14 @@ In order to update the credential, the claimer needs the complete history of all
 ```ts
 const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
 let credential = () => {
-    // request attestation from attester
-    // build credential
+    // Request an attestation from an attester.
+    // Build a credential.
     // ...
     return credential
 }()
 
 // How to update your credential?
-// credential is updated to accumulator 55, the newest accumulator has index 59
+// The Credential is updated to accumulator 55, the newest accumulator has index 59.
 const newCredential = await credential.update({
     attesterPubKey: attestersPublicKey,
     accumulators: [accumulator56, accumulator57, accumulator58, accumulator59],
