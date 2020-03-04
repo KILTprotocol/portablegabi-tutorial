@@ -1,15 +1,28 @@
-# Set up 
+# Blockchain
 
-You are required to have an active [substrate](https://www.parity.io/substrate/) blockchain implementing the [`portablegabi-pallet`](https://github.com/KILTprotocol/portablegabi-pallet). You could clone and set up this [`portablegabi-node`](https://github.com/KILTprotocol/portablegabi-node) basic substrate template implementing the portablegabi-pallet.
+Although you are free to choose how you would like to provide access to accumulators, we suggest that you use a blockchain for that.
+The advantages of using a blockchain are, that you have a decentralized database.
+Would each attester operate their own servers for providing accumulators, these servers become a single point of failure.
+If a server is not reachable the verifier cannot check if a credential was recently revoked.
+Another concern of a centralised approach is the privacy of the claimer.
+Since the attester operates the server where the accumulator is stored, she can also track how often a claimer updates their credential.
+A blockchain can prevent attesters from tracking claimers and provides a redundant storage.
 
 ### Build the chain
 
+If you want to use a blockchain, you can integrate our [`portablegabi pallet`](https://github.com/KILTprotocol/portablegabi-pallet) into your [substrate blockchain](https://www.parity.io/substrate/).
+We also provide a blockchain template which includes our pallet and can be used to store accumulators.
+For that just clone and set up the [`portablegabi-node`](https://github.com/KILTprotocol/portablegabi-node) or use the template to create your own project.
+
 ```bash
-git clone git@github.com:KILTprotocol/portablegabi-node.git
+git clone https://github.com/KILTprotocol/portablegabi-node.git
 cd portablegabi-node
 ./scripts/init.sh
-cargo build --release
+cargo build
 ```
+
+You might want to grab a cup of tee! 🍵
+Building the chain might take up to 30 min.
 
 ### Start the chain
 
