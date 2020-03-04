@@ -1,53 +1,13 @@
 # Getting Started
 
-Unfortunately, you cannot immediately play around with the API and first have to set up a few things.
-
-### Required dependencies 
+This tutorial will show you how to use the portablegabi library.
+It will take you approx. 30 minutes to work through.
+Before you can dive in and try out our tutorial, you need to set up your environment.
 
 To get started you need to have the following dependencies installed:
-- [node](https://nodejs.org/en/)
+
+- [node](https://nodejs.org/en/) (any version starting with 10.19)
 - [yarn](https://yarnpkg.com/getting-started)
-- [go](https://golang.org/doc/install)
-- [go dep](https://github.com/golang/dep)
-
-Make sure you [set up your](https://github.com/golang/go/wiki/SettingGOPATH) `GOPATH` and `GOBIN` directories and environment variables.
- 
-#### Optional: Test with Substrate chain
-
-If you want test the examples with a blockchain, you will also need to install [rust](https://rustup.rs) and [Substrate](https://substrate.dev/docs/en/getting-started/installing-substrate). For more information about setting up a chain to be used with the Portablegabi API, see the exemplary [`portablegabi-node`](https://github.com/KILTprotocol/portablegabi-node). For code examples of the Portablegabi chain API, please have a look at our [chain examples](https://github.com/KILTprotocol/portablegabi/tree/develop/docs/examples). 
-
-### Build Portablegabi
-
-After you are done, clone the [portablegabi project](https://github.com/KILTprotocol/portablegabi) into the correct go path.
-
-```bash
-mkdir -p $GOPATH/src/github.com/KILTprotocol/
-git clone https://github.com/KILTprotocol/portablegabi.git \
-  $GOPATH/src/github.com/KILTprotocol/portablegabi
-cd $GOPATH/src/github.com/KILTprotocol/portablegabi
-```
-
-Install all the dependencies, build the Portablegabi WASM and compile the typescript code.
-
-```bash
-yarn install
-yarn build
-```
-
-Now you can execute the example to ensure everything worked fine.
-
-```bash
-yarn ts-node docs/examples/exampleSingle.ts
-```
-
-You can use the Portablegabi version you have just built by running `yarn link` inside the Portablegabi project and `yarn link @kiltprotocol/portablegabi` in the project where you want to use Portablegabi.
-
-## Add Portablegabi as dependency
-
-To use the Portablegabi module which is published to npm, use either npm or yarn to add it to your dependencies:
-
-- `npm install @kiltprotocol/portablegabi`
-- `yarn add @kiltprotocol/portablegabi`
 
 ## Set up a tutorial project
 
