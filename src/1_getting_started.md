@@ -2,7 +2,7 @@
 
 This tutorial will show you how to use the portablegabi library.
 It will take you approx. 30 minutes to work through.
-Before you can dive in and try out our tutorial, you need to set up your environment.
+Before you dive in and try out the tutorial, you need to set up your environment.
 
 To get started you need to have the following dependencies installed:
 
@@ -35,7 +35,7 @@ exec()
 
 The creation of attester keys can take 10 to 30 minutes in javascript. 
 Therefore, we recommend using the following example keys which to speed up the process.
-Note that you should never use this keys in production.
+Note that you should never use these keys in production.
 
 ```js
 const privKey = new portablegabi.AttesterPrivateKey(

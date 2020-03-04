@@ -1,7 +1,7 @@
 # Introduction to Portablegabi 0.0.2
 
 The Portablegabi library provides an **easy to use API for signing, verifying and revoking JSON objects**.
-The intent of this library is to enable the claimer, who possesses the signed JSON object, to prove to a third party, called verifier, that specific properties are present inside the JSON object and that the object was signed by a trusted attester.
+This library intends to enable the claimer, who possesses the signed JSON object, to prove to a third party, called verifier, that specific property is present inside the JSON object and that a trusted attester signed the object.
 The important benefits of Portablegabi are that the **claimer stays anonymous during the verification**.
 The verifier is not able to link two verification sessions to a single identity and learns nothing about the user besides the shared properties.
 

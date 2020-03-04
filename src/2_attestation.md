@@ -21,35 +21,35 @@ Before an attester can create attestations, she has to generate a key pair and p
 
 ```ts
 const portablegabi = require("@KILTprotocol/portablegabi")
-// build a new attester
-// note: generating a new key pair will take around 10-30 minutes
+// Build a new attester.
+// Note: generating a new key pair will take around 10-30 minutes.
 // const attester = await portablegabi.Attester.create(365, 70)
 
 
-// for this example you could use the provided keys
-// note: never use those keys in production!!!
+// For this example you could use the provided keys.
+// Note: never use those keys in production!!!
 const attester = new portablegabi.Attester(pubKey, privKey)
 
-// create a new accumulator (which is used for revocation)
+// Create a new accumulator (which is used for revocation).
 let accumulator = await attester.createAccumulator()
 console.log("Accumulator: ", accumulator.valueOf())
 
-// build a new claimer and generate a new master key
+// Build a new claimer and generate a new master key.
 // const claimer = await portablegabi.Claimer.create()
-// or use a mnemonic for:
+// or use a mnemonic:
 const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
 ```
 
 After the attester and claimer have both generated their keys, the attestation session can be initiated by the attester.
 
 ```js
-// the attester initiates the attestation session
+// The attester initiates the attestation session.
 const {
     message: startAttestationMsg,
     session: attestationSession,
 } = await attester.startAttestation()
 
-// the claimer answers with an attestation request
+// The claimer answers with an attestation request.
 const claim = {
     age: 15,
     name: "George",
