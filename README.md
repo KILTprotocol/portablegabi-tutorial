@@ -15,3 +15,5 @@ Build the book and open it using your default browser:
 ```
 mdbook serve -o
 ```
+
+![](./web3_foundation_grants_badge_black.svg)
