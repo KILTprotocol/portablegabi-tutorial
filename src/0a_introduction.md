@@ -1,8 +1,8 @@
 # Introduction to Portablegabi 0.0.2
 
-The Portablegabi library provides an **easy to use API for signing, verifying and revoking JSON objects**.
-This library intends to enable the claimer, who possesses the signed JSON object, to prove to a third party, called verifier, that specific property is present inside the JSON object and that a trusted attester signed the object.
-The important benefits of Portablegabi are that the **claimer stays anonymous during the verification**.
+The Portablegabi library provides an **easy to use API for signing JSON objects and for verifying and revoking these signatures**.
+This library intends to enable the claimer, who possesses the signed JSON object, to prove to a third party, called verifier, that a specific property is present inside the JSON object and that a trusted attester signed the object.
+The important benefit of Portablegabi is that the **claimer stays anonymous during the verification**.
 The verifier is not able to link two verification sessions to a single identity and learns nothing about the user besides the shared properties.
 
 ## Terminology
@@ -11,17 +11,17 @@ The verifier is not able to link two verification sessions to a single identity 
 
 **Claim**: A JSON object.
 
-**Claimer**: An entity which is in possession of a credential.
+**Credential**: A signed **Claim** which can be used to create a verifiable presentation.
 
-**Credential**: A JSON object which can be used to create a verifiable presentation.
+**Claimer**: An entity which is in possession of a **Credential**.
 
-**Presentation**: A JSON object which contains properties and a signature from an attester.
+**Presentation**: A **Credential** slice (JSON object) which contains selected properties plus a signature from an attester.
 
 **Verifier**: An entity which requests signed properties from the claimer in form of a presentation.
 
-**Accumulator**: A whitelist which contains all non-revocation witnesses and can be used to prove that a credential was not revoked.
-
 **Witness**: A unique number tied to a credential which is required to prove whether it has been revoked or not.
+
+**Accumulator**: A whitelist which contains all non-revocation witnesses and can be used to prove that a credential was not revoked.
 
 ## Technical overview
 
