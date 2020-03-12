@@ -22,7 +22,7 @@ On the other hand, the verifier needs to trust the attester who signed the crede
 
 However, new versions of accumulators could be added to the chain quite frequently.
 The worst case would be, that the claimer needs to update their credential before every verification.
-To prevent this, a verifier can signal the claimer that they accept not only the newest accumulator, but also accumulators which where created after a certain time. This timestamp is set using the `reqUpdatedAfter` parameter.
+To prevent this, a verifier can signal the claimer that they accept not only the newest accumulator, but also accumulators which are more recent than a specified point in time. This timestamp is set using the `reqUpdatedAfter` parameter.
 If the verifier sends the current time, the claimer most likely has to check for the newest accumulator.
 During the verification the verifier needs to decide what they think is the latest accumulator.
 This is done using the `latestAccumulator` parameter.

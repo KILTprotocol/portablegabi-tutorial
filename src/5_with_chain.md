@@ -1,7 +1,7 @@
 # Blockchain
 
 Although you are free to choose how you would like to provide access to accumulators, we suggest that you use a blockchain for that.
-The advantages of using a blockchain are, that you have a decentralized database.
+The advantages of using a blockchain are that you have a decentralized database.
 Would each attester operate their own servers for providing accumulators, these servers become a single point of failure.
 If a server is not reachable the verifier cannot check if a credential was recently revoked.
 Another concern of a centralised approach is the privacy of the claimer.
