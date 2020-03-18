@@ -35,7 +35,7 @@ exec()
 
 The creation of attester keys can take 10 to 30 minutes in javascript. 
 Therefore, we recommend using the following example keys which to speed up the process.
-Note that you should never use these keys in production.
+Please note that you should never use these keys in production.
 
 ```js
 const privKey = new portablegabi.AttesterPrivateKey(
