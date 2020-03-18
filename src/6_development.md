@@ -9,9 +9,9 @@ For that, start with installing the following dependencies:
 - [go](https://golang.org/doc/install) (version 1.13 or newer)
 - [go dep](https://github.com/golang/dep)
 
-Make sure you [set up your](https://github.com/golang/go/wiki/SettingGOPATH) `GOPATH` and `GOBIN` directories and environment variables.
+Make sure you [set up your](https://github.com/golang/go/wiki/SettingGOPATH) `GOPATH` directory and environment variables.
 
-After you are done, clone the [portablegabi project](https://github.com/KILTprotocol/portablegabi) into the correct go path.
+After you are done, clone the [portablegabi project](https://github.com/KILTprotocol/portablegabi) into the correct go path:
 
 ```bash
 mkdir -p $GOPATH/src/github.com/KILTprotocol/
@@ -20,14 +20,14 @@ git clone https://github.com/KILTprotocol/portablegabi.git \
 cd $GOPATH/src/github.com/KILTprotocol/portablegabi
 ```
 
-Install all the dependencies, build the Portablegabi WASM and compile the typescript code.
+Next, you need to install all the node dependencies, build the Portablegabi WASM and transpile the Typescript code:
 
 ```bash
 yarn install
 yarn build
 ```
 
-Now you can execute the example to ensure everything worked fine.
+To ensure everything went fine, you can execute any of the provided examples:
 
 ```bash
 yarn ts-node docs/examples/exampleSingle.ts

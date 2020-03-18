@@ -37,7 +37,7 @@ The claimer can interact with the same verifier multiple times without the verif
 The library also provides a scheme to support revocation of attestations using a distributed ledger.
 Each attestation contains a non-revocation witness which proves that the attestation is still valid and has not been revoked.
 Every witness is by default contained inside a mathematical accumulator which is written on a blockchain.
-If the attester wishes to revoke an attestation, they remove the witness from the accumulator and updates the blockchain with the new accumulator.
+If the attester wishes to revoke an attestation, they remove the witness from the accumulator and update the blockchain with the new accumulator.
 
 ## Architecture of Portablegabi
 
