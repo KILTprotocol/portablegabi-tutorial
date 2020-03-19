@@ -29,9 +29,9 @@ The cryptographic primitives of Portablegabi are implemented in [Gabi](https://g
 Gabi makes use of [CL-Signatures](https://dl.acm.org/doi/10.5555/1766811.1766838) and is based on the [Idemix Specification](https://domino.research.ibm.com/library/cyberdig.nsf/papers/EEB54FF3B91C1D648525759B004FBBB1/File/rz3730_revised.pdf).
 
 Portablegabi provides a protocol for [attestation](2_attestation.md) and [verification](3_verification.md) of claims.
-The main goals of Portablegabi are *selective disclosure* and *unlinkability*.
-*Selective disclosure* enables the claimer to only present a subset of the information contained inside their attested JSON object.
-The *unlinkability* feature hinders the verifier to link two verification sessions of the same claimer together.
+The main goals of Portablegabi are _selective disclosure_ and _unlinkability_.
+_Selective disclosure_ enables the claimer to only present a subset of the information contained inside their attested JSON object.
+The _unlinkability_ feature hinders the verifier to link two verification sessions of the same claimer together.
 The claimer can interact with the same verifier multiple times without the verifier being able to tell if they talked to the same claimer. Please note that this only holds true if the claimer does not reveal attributes which uniquely identify him. Otherwise, the verifier would be able to link multiple sessions together.
 
 The library also provides a scheme to support revocation of attestations using a distributed ledger.
@@ -42,7 +42,7 @@ If the attester wishes to revoke an attestation, they remove the witness from th
 ## Architecture of Portablegabi
 
 Portablegabi consists of a part written in [Go](https://golang.org) which wraps the Gabi library and can be compiled to [WASM](https://webassembly.org).
-The second part is a [Typescript](http://www.typescriptlang.org/index.html) layer which uses the WASM-Module and provides an API for attestation, verification and revocation. It provides usage of with and without a [Substrate](https://www.parity.io/substrate/)-based blockchain implementing the [`portablegabi-pallet`](https://github.com/KILTprotocol/portablegabi-pallet). 
+The second part is a [Typescript](http://www.typescriptlang.org/index.html) layer which uses the WASM-Module and provides an API for attestation, verification and revocation. It provides usage with and without a [Substrate](https://www.parity.io/substrate/)-based blockchain implementing the [`portablegabi-pallet`](https://github.com/KILTprotocol/portablegabi-pallet).
 
 ## State of Security
 
