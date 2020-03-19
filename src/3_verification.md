@@ -1,7 +1,7 @@
 # Verification
 
-During the verification, the verifier requests a set of attributes from the claimer. 
-The claimer discloses his attributes and provides a proof (referred to as presentation).
+During the verification, the verifier requests a set of attributes from the claimer.
+The claimer discloses their attributes and provides a proof (referred to as presentation).
 The verifier can then validate that the attributes are signed by a trusted attester using the claimer's presentation.
 
 ```mermaid
@@ -16,68 +16,79 @@ sequenceDiagram
 ```
 
 The claimer is required to have both a credential and the public key of the attester who signed it.
-On the other hand, the verifier needs to trust the attester who signed the credential and her latest accumulator. 
+On the other hand, the verifier needs to trust the attester who signed the credential and their latest accumulator.
 
-### Timestamps
+### Accumulator timestamps
 
 However, new versions of accumulators could be added to the chain quite frequently.
-The worst case would be, that the claimer needs to update his credential before every verification.
-To prevent this, a verifier can signal the claimer that he accepts not only the newest accumulator, but also accumulators which where created after a certain time. This timestamp is set using the `reqUpdatedAfter` parameter.
-If the verifier sends the current time, the claimer most likely has to check for the newest accumulator.
-During the verification the verifier needs to decide what he thinks is the latest accumulator.
-This is done using the `latestAccumulator` parameter.
-If the claimer sends a newer accumulator than `latestAccumulator` the verifier accepts this accumulator.
+The worst case would be, that the claimer needs to update their credential before every verification.
+To prevent this, **a verifier can signal the claimer that they accept not only the newest accumulator, but also accumulators which are more recent than a specified point in time**. This timestamp is set using the `reqUpdatedAfter` parameter.
 
-In short: the verifier accepts an accumulator if it is newer than the newest accumulator he knows of or if it was created after `reqUpdatedAfter`.
+If the verifier sends the current time, the claimer most likely has to check for the newest accumulator.
+During the verification, the verifier needs to decide on a latest accumulator.
+This is done using the `latestAccumulator` parameter.
+If the claimer sends a newer accumulator than `latestAccumulator`, the verifier accepts this accumulator automatically as it's timestamp is greater than the required one.
+
+In short: **the verifier accepts an accumulator if it is newer than the newest accumulator they know of** or **if it was created after `reqUpdatedAfter`**.
+
+For more details about the accumulator, have a look at the next [section](./4_revocation.md).
 
 ## Example
 
 ```ts
-const portablegabi = require("@KILTprotocol/portablegabi")
+const portablegabi = require("@KILTprotocol/portablegabi");
 
-const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
+const claimer = await portablegabi.Claimer.buildFromMnemonic(
+  "siege decrease quantum control snap ride position strategy fire point airport include"
+);
 
-const credential = new portablegabi.Credential('<The credential created during the attestation>')
-const accumulator = new portablegabi.Accumulator('<The accumulator created during the attestation>')
-const pubKey = new portablegabi.AttesterPublicKey('<Public key of the attester>')
+const credential = new portablegabi.Credential(
+  "<The credential created during the attestation>"
+);
+const accumulator = new portablegabi.Accumulator(
+  "<The accumulator created during the attestation>"
+);
+const pubKey = new portablegabi.AttesterPublicKey(
+  "<Public key of the attester>"
+);
 
-// the verifier request a presentation
+// The verifier request a presentation.
 const {
-    // local information used to verify the presentation later
-    session: verifierSession,
-    // the request which should be sent to the claimer containing the requested attributes
-    message: presentationReq,
+  // Local information used to verify the presentation later.
+  session: verifierSession,
+  // The request which should be sent to the claimer containing the requested attributes.
+  message: presentationReq
 } = await portablegabi.Verifier.requestPresentation({
-    // specify which attributes should be disclosed
-    requestedAttributes: ["age"],
-    // the threshold for the age of the accumulator
-    // if the accumulator was created before this date, the proof will be rejected
-    // except if the accumulator is the newest available accumulator
-    reqUpdatedAfter: new Date(),
-})
+  // Specify which attributes should be disclosed.
+  requestedAttributes: ["age"],
+  // The threshold for the age of the accumulator.
+  // If the accumulator was created before this date, the proof will be rejected
+  // except if the accumulator is the newest available accumulator.
+  reqUpdatedAfter: new Date()
+});
 
-// after the claimer has received the presentationRequest, he builds a presentation:
+// After the claimer has received the presentationRequest, they build a presentation:
 const presentation = await claimer.buildPresentation({
-    credential,
-    presentationReq,
-    attesterPubKey: pubKey,
-})
+  credential,
+  presentationReq,
+  attesterPubKey: pubKey
+});
 
-// the presentation is sent over to the verifier who validates the proof and extracts the claim
+// The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {
-    // the contained claim, this value is undefined if the proof could not be validated
-    claim,
-    // a boolean which indicates whether the presentation was valid
-    verified,
+  // The contained claim, this value is undefined if the proof could not be validated.
+  claim,
+  // A boolean which indicates whether the presentation was valid.
+  verified
 } = await portablegabi.Verifier.verifyPresentation({
-    // the presentation which was sent over by the claimer
-    proof: presentation,
-    verifierSession,
-    // the public key which was used by the attester to sign the credential
-    attesterPubKey: pubKey,
-    // this accumulator is used to check whether the claimer provided the newest available accumulator
-    latestAccumulator: accumulator,
-})
-console.log('Claim: ', claim)
-console.log('Verified? ', verified)
+  // The presentation which was sent over by the claimer.
+  proof: presentation,
+  verifierSession,
+  // The public key which was used by the attester to sign the credential.
+  attesterPubKey: pubKey,
+  // This accumulator is used to check whether the claimer provided the newest available accumulator.
+  latestAccumulator: accumulator
+});
+console.log("Claim: ", claim);
+console.log("Verified? ", verified);
 ```
