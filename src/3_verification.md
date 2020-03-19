@@ -36,21 +36,21 @@ For more details about the accumulator, have a look at the next [section](./4_re
 ## Example
 
 ```ts
-const portablegabi = require('@KILTprotocol/portablegabi')
+const portablegabi = require("@KILTprotocol/portablegabi");
 
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
-  'siege decrease quantum control snap ride position strategy fire point airport include'
-)
+  "siege decrease quantum control snap ride position strategy fire point airport include"
+);
 
 const credential = new portablegabi.Credential(
-  '<The credential created during the attestation>'
-)
+  "<The credential created during the attestation>"
+);
 const accumulator = new portablegabi.Accumulator(
-  '<The accumulator created during the attestation>'
-)
+  "<The accumulator created during the attestation>"
+);
 const pubKey = new portablegabi.AttesterPublicKey(
-  '<Public key of the attester>'
-)
+  "<Public key of the attester>"
+);
 
 // The verifier request a presentation.
 const {
@@ -60,19 +60,19 @@ const {
   message: presentationReq
 } = await portablegabi.Verifier.requestPresentation({
   // Specify which attributes should be disclosed.
-  requestedAttributes: ['age'],
+  requestedAttributes: ["age"],
   // The threshold for the age of the accumulator.
   // If the accumulator was created before this date, the proof will be rejected
   // except if the accumulator is the newest available accumulator.
   reqUpdatedAfter: new Date()
-})
+});
 
 // After the claimer has received the presentationRequest, they build a presentation:
 const presentation = await claimer.buildPresentation({
   credential,
   presentationReq,
   attesterPubKey: pubKey
-})
+});
 
 // The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {
@@ -88,7 +88,7 @@ const {
   attesterPubKey: pubKey,
   // This accumulator is used to check whether the claimer provided the newest available accumulator.
   latestAccumulator: accumulator
-})
-console.log('Claim: ', claim)
-console.log('Verified? ', verified)
+});
+console.log("Claim: ", claim);
+console.log("Verified? ", verified);
 ```
