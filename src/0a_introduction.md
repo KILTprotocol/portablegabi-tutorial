@@ -51,6 +51,7 @@ Therefore, **an accumulator includes every witness by default**.
 To be more precise, checking whether a witness is included in an accumulator is done by checking a mathmatical equation.
 If the attester wishes to revoke an attestation, they remove the associated witness from the accumulator and update the blockchain with the new one.
 This is done by calculating the new accumulator in such a way that the inclusion equality check does not hold true for the witness of the revoked credential.
+Thus, if a claimer wants to prove their credential has not been revoked, they prove it is still included inside the newest accumulator.
 
 For more information about the accumulator and witness, please check out the cryptography section of the [IRMA docs](https://irma.app/docs/revocation/#cryptography) or ["Dynamic accumulators and application to efficient revocation of anonymous credentials"](http://static.cs.brown.edu/people/alysyans/papers/camlys02.pdf) by Camenisch et al.
 
