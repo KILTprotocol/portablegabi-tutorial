@@ -1,0 +1,432 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Blockchain - Portablegabi Tutorial</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="mermaid.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="affix "><a href="0a_introduction.html">Introduction</a></li><li class="expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class=""><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class=""><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class="expanded "><a href="5_with_chain.html" class="active"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class=""><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Portablegabi Tutorial</h1>
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                            <a href="https://github.com/KILTprotocol/portablegabi" title="Git repository" aria-label="Git repository">
+                                <i id="git-repository-button" class="fa fa-github"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#blockchain" id="blockchain">Blockchain</a></h1>
+<p>Although you are free to choose how you would like to provide access to accumulators, we suggest that you use a blockchain for that.
+The advantage of using a blockchain is that you have a decentralized database.
+If each attester operated their own servers for providing accumulators, these servers would become a single point of failure.
+If a server is not reachable, the verifier cannot check if a credential was recently revoked.
+Another concern of a centralised approach is the privacy of the claimer.
+Since the attester operates the server where the accumulator is stored, they can also track how often a claimer updates their credential.
+A blockchain can prevent attesters from tracking claimers and provides a redundant storage.</p>
+<h3><a class="header" href="#build-the-chain" id="build-the-chain">Build the chain</a></h3>
+<p>If you want to use a blockchain, you can integrate our <a href="https://github.com/KILTprotocol/portablegabi-pallet"><code>portablegabi pallet</code></a> into your <a href="https://www.parity.io/substrate/">substrate blockchain</a>.
+We also provide a blockchain template which includes our pallet and can be used to store accumulators.
+In order to use that, just clone and set up the <a href="https://github.com/KILTprotocol/portablegabi-node"><code>portablegabi-node</code></a> or use the template to create your own project.</p>
+<pre><code class="language-bash">git clone https://github.com/KILTprotocol/portablegabi-node.git
+cd portablegabi-node
+./scripts/init.sh
+cargo build
+</code></pre>
+<p>You might want to grab a cup of tee! 🍵
+Building the chain might take up to 30 min.</p>
+<h3><a class="header" href="#start-the-chain" id="start-the-chain">Start the chain</a></h3>
+<pre><code class="language-bash">./target/release/node-portablegabi --dev
+</code></pre>
+<h1><a class="header" href="#run-examples" id="run-examples">Run examples</a></h1>
+<p>The purpose of the chain is to both store each attester's accumulator and give access to old revisions, as these are required when updating older credentials.
+Therefore, we have added some chain functionality to both the credential and attester classes.</p>
+<h2><a class="header" href="#example-1-complete-process-for-single-credential-with-revocation" id="example-1-complete-process-for-single-credential-with-revocation">Example 1: Complete process for single credential with revocation</a></h2>
+<p>In the following, we will run a complete exemplary chain process:</p>
+<ol>
+<li>Connect to the chain and add an accumulator.</li>
+<li>Attest a claim.</li>
+<li>Revoke the attested claim from 2. and (automatically) update the accumulator.</li>
+<li>Check out multiple verifications with different timestamps.</li>
+</ol>
+<pre><code class="language-javascript">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+
+const privKey = new portablegabi.AttesterPrivateKey(&quot;...&quot;);
+const pubKey = new portablegabi.AttesterPublicKey(&quot;...&quot;);
+
+async function exec() {
+  /** (1) Chain phase */
+  // (1.1) Connect to the chain.
+  const chain = await portablegabi.connect({
+    pgabiModName: &quot;portablegabiPallet&quot;
+  });
+  console.log(&quot;Connected to chain&quot;);
+
+  // (1.2) Create Alice identity.
+  const attester = await portablegabi.AttesterChain.buildFromURI(
+    pubKey,
+    privKey,
+    &quot;//Alice&quot;
+  );
+
+  // (1.3) Create a fresh accumulator.
+  const accPreRevo = await attester.createAccumulator();
+
+  // (1.4) Put the accumulator on chain.
+  await attester.updateAccumulator(accPreRevo);
+
+  // Check whether it has actually been added to chain.
+  // We need to wait for next block since updating the accumulator is a transaction.
+  await chain.waitForNextBlock();
+  console.log(
+    &quot;Latest accumulator === accPreRevo? Expected true, received&quot;,
+    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
+      accPreRevo.valueOf()
+  );
+
+  /** (2) Attestation phase */
+  // (2.1) The attester initiates the attestation session.
+  const {
+    message: startAttestationMsg,
+    session: attestationSession
+  } = await attester.startAttestation();
+
+  // (2.2) The claimer answers with an attestation request.
+  const claimer = await portablegabi.Claimer.buildFromMnemonic(
+    &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
+  );
+  const claim = {
+    name: &quot;George Ericson&quot;,
+    age: 24,
+    drivers_license: {
+      id: &quot;127128204193&quot;,
+      category: &quot;B2&quot;,
+      licensing_authority: &quot;Berlin A52452&quot;
+    }
+  };
+  const {
+    message: attestationRequest,
+    session: claimerSession
+  } = await claimer.requestAttestation({
+    // the received attestation message
+    startAttestationMsg,
+    // the claim which should get attested
+    claim,
+    // the public key of the attester
+    attesterPubKey: attester.publicKey
+  });
+
+  // (2.3) The attester issues an attestation.
+  const {
+    // The attestation should be sent over to the claimer.
+    attestation,
+    // The witness should be stored for later revocation.
+    witness
+  } = await attester.issueAttestation({
+    attestationSession,
+    attestationRequest,
+    // The update is used to generate a non-revocation witness.
+    accumulator: accPreRevo
+  });
+  const credential = await claimer.buildCredential({
+    claimerSession,
+    attestation
+  });
+
+  /** (3) Revocation phase */
+
+  // Revoke the attestation and receive a new accumulator whitelist.
+  const accPostRevo = await attester.revokeAttestation({
+    witnesses: [witness],
+    accumulator: accPreRevo
+  });
+  // Check whether accPostRevo is the latest accumulator on chain.
+  await chain.waitForNextBlock();
+  console.log(
+    &quot;Latest accumulator === accPostRevo? Expected true, received&quot;,
+    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
+      accPostRevo.valueOf()
+  );
+
+  /** (4) Verification phase */
+  // Get the exact timestamp of the revocation for simplicity.
+  const timeAtRev = await accPostRevo.getDate(attester.publicKey);
+
+  // (4.1) The verifier sends a nonce and context to the claimer and requests disclosed attributes.
+  // Note: the requested timestamp at revocation
+  const {
+    session: verifierSession,
+    message: presentationReq
+  } = await portablegabi.Verifier.requestPresentation({
+    requestedAttributes: [&quot;age&quot;, &quot;drivers_license.category&quot;],
+    reqUpdatedAfter: timeAtRev
+  });
+
+  // (4.2) The claimer builds a presentation with the revoked credential.
+  // Note: They need to update as the credential was build before timeAtRev.
+  const presentation = await claimer
+    .buildPresentation({
+      credential,
+      presentationReq,
+      attesterPubKey: attester.publicKey
+    })
+    .catch(() =&gt; {
+      console.log(
+        &quot;Caught expected error when building presentation due to credential not matching the required timestamp&quot;
+      );
+      const updatedCredential = credential.updateFromChain({
+        attesterPubKey: attester.publicKey,
+        attesterChainAddress: attester.address
+      });
+      return claimer.buildPresentation({
+        credential: updatedCredential,
+        presentationReq,
+        attesterPubKey: attester.publicKey
+      });
+    });
+
+  // (4.3) The verifier checks the presentation for non-revocation, valid data and matching attester's public key.
+  // We expect success because the credential is still valid in accPreRevo.
+  const {
+    verified: verifiedRev0
+  } = await portablegabi.Verifier.verifyPresentation({
+    proof: presentation,
+    verifierSession,
+    attesterPubKey: attester.publicKey,
+    latestAccumulator: accPreRevo
+  });
+  // We expect failure because the credential is invalid in accPostRevo.
+  const {
+    verified: verifiedRev1
+  } = await portablegabi.Verifier.verifyPresentation({
+    proof: presentation,
+    verifierSession,
+    attesterPubKey: attester.publicKey,
+    latestAccumulator: accPostRevo
+  });
+  console.log(
+    &quot;Cred verified w/ timestamp at revocation and old accumulator? Expected true, received&quot;,
+    verifiedRev0
+  );
+  console.log(
+    &quot;Cred verified w/ timestamp at revocation and new accumulator? Expected false, received&quot;,
+    verifiedRev1
+  );
+}
+exec()
+  .catch(e =&gt; console.log(e))
+  .finally(() =&gt; process.exit(1));
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="4_revocation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="6_development.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="4_revocation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="6_development.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="mermaid-init.js"></script>
+        
+        <script type="text/javascript" src="highlight.js"></script>
+        
+
+        
+
+    </body>
+</html>

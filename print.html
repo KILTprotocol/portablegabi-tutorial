@@ -1,0 +1,745 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Portablegabi Tutorial</title>
+        
+        <meta name="robots" content="noindex" />
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="mermaid.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="affix "><a href="0a_introduction.html">Introduction</a></li><li class=""><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class=""><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class=""><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class=""><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class=""><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Portablegabi Tutorial</h1>
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                            <a href="https://github.com/KILTprotocol/portablegabi" title="Git repository" aria-label="Git repository">
+                                <i id="git-repository-button" class="fa fa-github"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#introduction-to-portablegabi-002" id="introduction-to-portablegabi-002">Introduction to Portablegabi 0.0.2</a></h1>
+<p>The Portablegabi library provides an <strong>easy to use API for signing JSON objects and for verifying and revoking these signatures</strong>.
+This library intends to enable the claimer, who possesses the signed JSON object, to prove to a third party, called verifier, that a specific property is present inside the JSON object and that a trusted attester signed the object.
+The important benefit of Portablegabi is that the <strong>claimer stays anonymous during the verification</strong>.
+The verifier is not able to link two verification sessions to a single identity and learns nothing about the user besides the shared properties.</p>
+<h2><a class="header" href="#terminology" id="terminology">Terminology</a></h2>
+<p><strong>Attester</strong>: An entity which signs JSON objects.</p>
+<p><strong>Claim</strong>: A JSON object.</p>
+<p><strong>Credential</strong>: A signed <strong>Claim</strong> which can be used to create a verifiable presentation.</p>
+<p><strong>Claimer</strong>: An entity which is in possession of a <strong>Credential</strong>.</p>
+<p><strong>Presentation</strong>: A <strong>Credential</strong> slice (JSON object) which contains selected properties plus a signature from an attester.</p>
+<p><strong>Verifier</strong>: An entity which requests signed properties from the claimer in form of a presentation.</p>
+<p><strong>Witness</strong>: A unique number tied to a credential which is required to prove whether it has been revoked or not.</p>
+<p><strong>Accumulator</strong>: A whitelist which contains all non-revocation witnesses and can be used to prove that a credential was not revoked.</p>
+<h2><a class="header" href="#technical-overview" id="technical-overview">Technical overview</a></h2>
+<p>The cryptographic primitives of Portablegabi are implemented in <a href="https://github.com/privacybydesign/gabi">Gabi</a> which is maintained by the <a href="https://privacybydesign.foundation/en/">privacy by design foundation</a> and also used inside <a href="https://www.irmacard.org">IRMA</a>.
+Gabi makes use of <a href="https://dl.acm.org/doi/10.5555/1766811.1766838">CL-Signatures</a> and is based on the <a href="https://domino.research.ibm.com/library/cyberdig.nsf/papers/EEB54FF3B91C1D648525759B004FBBB1/File/rz3730_revised.pdf">Idemix Specification</a>.</p>
+<p>Portablegabi provides a protocol for <a href="2_attestation.html">attestation</a> and <a href="3_verification.html">verification</a> of claims.
+The <strong>main goals of Portablegabi are <em>selective disclosure</em> and <em>multi-show unlinkability</em></strong>.
+<em>Selective disclosure</em> enables the claimer to only present a subset of the information contained inside their attested JSON object.
+The <em>unlinkability</em> feature hinders the verifier to link two verification sessions of the same claimer together.
+The claimer can interact with the same verifier multiple times without the verifier being able to tell if they talked to the same claimer.
+Please note that this only holds true if the claimer does not reveal attributes which uniquely identify them.
+Otherwise, the verifier would be able to link multiple sessions together.</p>
+<h3><a class="header" href="#revocation" id="revocation">Revocation</a></h3>
+<p>The library also provides a scheme to support revocation of attestations using a distributed ledger.
+Each attestation contains a <em>non-revocation witness</em> which proves that the attestation is still valid and has not been revoked.
+A witness basically consists of two large integer numbers.
+It is valid against an attester's accumulator like a signature over a message can be valid against a public key.</p>
+<h4><a class="header" href="#accumulator" id="accumulator">Accumulator</a></h4>
+<p>Each attester has their own <em>accumulator</em> that is written on the blockchain.
+Initially, this is just a large random integer and a timestamp signed by the attester.
+Therefore, <strong>an accumulator includes every witness by default</strong>.
+To be more precise, checking whether a witness is included in an accumulator is done by checking a mathmatical equation.
+If the attester wishes to revoke an attestation, they remove the associated witness from the accumulator and update the blockchain with the new one.
+This is done by calculating the new accumulator in such a way that the inclusion equality check does not hold true for the witness of the revoked credential.
+Thus, if a claimer wants to prove their credential has not been revoked, they prove it is still included inside the newest accumulator.</p>
+<p>For more information about the accumulator and witness, please check out the cryptography section of the <a href="https://irma.app/docs/revocation/#cryptography">IRMA docs</a> or <a href="http://static.cs.brown.edu/people/alysyans/papers/camlys02.pdf">&quot;Dynamic accumulators and application to efficient revocation of anonymous credentials&quot;</a> by Camenisch et al.</p>
+<h2><a class="header" href="#architecture-of-portablegabi" id="architecture-of-portablegabi">Architecture of Portablegabi</a></h2>
+<p>Portablegabi consists of a part written in <a href="https://golang.org">Go</a> which wraps the Gabi library and can be compiled to <a href="https://webassembly.org">WASM</a>.
+The second part is a <a href="http://www.typescriptlang.org/index.html">Typescript</a> layer which uses the WASM-Module and provides an API for attestation, verification and revocation. It provides usage with and without a <a href="https://www.parity.io/substrate/">Substrate</a>-based blockchain implementing the <a href="https://github.com/KILTprotocol/portablegabi-pallet"><code>portablegabi-pallet</code></a>.</p>
+<h2><a class="header" href="#state-of-security" id="state-of-security">State of Security</a></h2>
+<p>There has been no code audit of portablegabi or of the gabi library.
+Portablegabi is therefore experimental and provides no security guarantees.</p>
+<h1><a class="header" href="#getting-started" id="getting-started">Getting Started</a></h1>
+<p>This tutorial will show you how to use the portablegabi library.
+It will take you approx. 30 minutes to work through.
+Before you dive in and try out the tutorial, you need to set up your environment.</p>
+<p>To get started you need to have the following dependencies installed:</p>
+<ul>
+<li><a href="https://nodejs.org/en/">node</a> (any version starting with 10.19)</li>
+<li><a href="https://yarnpkg.com/getting-started">yarn</a></li>
+</ul>
+<h2><a class="header" href="#set-up-a-tutorial-project" id="set-up-a-tutorial-project">Set up a tutorial project</a></h2>
+<p>If you want to try out the examples inside this tutorial, create a new project and add Portablegabi as a dependency (either by using <code>yarn add</code> or <code>yarn link</code>)</p>
+<pre><code class="language-bash">mkdir portablegabi-rocks
+cd portablegabi-rocks
+yarn init -y
+yarn add @kiltprotocol/portablegabi
+# or if you have build and linked Portablegabi by yourself:
+yarn link @kiltprotocol/portablegabi
+</code></pre>
+<h2><a class="header" href="#run-the-examples" id="run-the-examples">Run the examples</a></h2>
+<p>Since most of the Portablegabi functions are asynchronous (due to calling the WASM in a callback-fashion), you need to wrap the examples inside an asynchronous function which you call in the end. Note: If you run the examples in Typescript and have version <a href="https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/">3.8+</a> installed, you won't be required to do this due to the added top-level <code>await</code>.</p>
+<pre><code class="language-js">async function exec() {
+  // Portable gabi example functions...
+}
+exec();
+</code></pre>
+<p>The creation of attester keys can take 10 to 30 minutes in javascript.
+Therefore, we recommend using the following example keys which to speed up the process.
+Please note that you should never use these keys in production.</p>
+<pre><code class="language-js">const privKey = new portablegabi.AttesterPrivateKey(
+  '{&quot;XMLName&quot;:{&quot;Space&quot;:&quot;&quot;,&quot;Local&quot;:&quot;&quot;},&quot;Counter&quot;:0,&quot;ExpiryDate&quot;:1610554062,&quot;P&quot;:&quot;iDYKxuFGt1Xv1aqMLaagjrOPX0hjkOlFrKOp4NPnSBHmQ9SFETUX1M43q3jLsGz+UEWFS3+SS9QpP4CTkl3p/w==&quot;,&quot;Q&quot;:&quot;92MJOhwjESn7QohCCY1oBxsToAfccGoKtE3sBoaNxHWoowSiCy8fMG+B1sO5QU+bV3i1xwvVno9o30RcMoXEaw==&quot;,&quot;PPrime&quot;:&quot;RBsFY3CjW6r36tVGFtNQR1nHr6QxyHSi1lHU8GnzpAjzIepCiJqL6mcb1bxl2DZ/KCLCpb/JJeoUn8BJyS70/w==&quot;,&quot;QPrime&quot;:&quot;e7GEnQ4RiJT9oUQhBMa0A42J0APuODUFWib2A0NG4jrUUYJRBZePmDfA62HcoKfNq7xa44Xqz0e0b6IuGULiNQ==&quot;,&quot;ECDSA&quot;:&quot;MHcCAQEEILO+g4uSDheZ6PSLxR7olFzUhZpeO9tQu84hX6UeIevaoAoGCCqGSM49AwEHoUQDQgAEKvmUz3HIZy890jE78CC9V9BuN8taO+L8GjAeS14v0CL7GCFZ1GMnaSZi4WG3mOjJlJ80CnMowIbUT3Fw1TluFw==&quot;,&quot;NonrevSk&quot;:null}'
+);
+const pubKey = new portablegabi.AttesterPublicKey(
+  '{&quot;XMLName&quot;:{&quot;Space&quot;:&quot;&quot;,&quot;Local&quot;:&quot;&quot;},&quot;Counter&quot;:0,&quot;ExpiryDate&quot;:1610554062,&quot;N&quot;:&quot;g6DWNN/cWep9/lCc6gg0tA8wS1y5LgQx2/fM/wMpYJE8MTZ9SJ3y9kjIBAeSb4aY3vsFhRp8aWsEZzAA0Qu0kW4bzyKN1RU7A0tlmkmDetCxu7Gy2zQMHlTg4YkAVxVYAIIIWhHKHrVLzH7zCsuXos1qm/sthByVdEXv4HPjCZU=&quot;,&quot;Z&quot;:&quot;BiDMFSNGKLIcHJY3tmh2vgiW7D3f5g5b+6Bjf0ns3/rPOg8x0BJ+CzqOLQL+loNIomOzBm/Pk36q3pmPPFMfug80AwUlZOvKTrzj29Agq4DF7p4jruElRyZsdGNjlFkVzILFT/9yrXfjD/9DAHXGm6/4unVnwKP4I0j1r9sLYtg=&quot;,&quot;S&quot;:&quot;Bxm9bNpNLZUM6gy74aR0HW2DadFuy/l+MOdZkG2BiFxbTEP24GXBYA3+d1xajplWEm2iLF4w2OeviIpr8VIzDNy6dXRyGcTnGzj6sVeGlR5u3N+8M2XNH1pNEymLQQbUAt3ogYSWiJW88bxHCf3AZiS91XT1Zh3ENCS9NsyGzt8=&quot;,&quot;G&quot;:&quot;Angd7BuIjTeWGsVLGVCtv+5dx1TMEUr/Z5Fhk7OFUNBexY8fuNfzxfeclgSQpC+nyIAFHc3RB+3Fcs2vOSygopVfLEJo9h7dSjtlcxSZ1wE8YNgouHwfVuq4KWixzIk7Le+IeUzNaQNOL9SI3h5mlxJ5QOO2Src+BPQuFjXPSfI=&quot;,&quot;H&quot;:&quot;U1MyQqwl1LrZY5G61Z2ZDM3zWQKv78HOluCrtxCDBsMvYNRLvhbppOhOdsnG3axN5NIH01/R6mlYojBDg9L7xSwR+1QpmHGUbwkemADlUZQ9c98Up1ORKxNW0asQJdPHV4NGqjQbDfJzejdGJwd95scmSpqLNvRTT+L0iW0ln4A=&quot;,&quot;T&quot;:&quot;BEIUJ5pXzFZPeoB3us341EWxwE7HByM4NaPYRS6YVtDcJdz+H9EEKdUcXhUVrJAQ2OZy2FP0+SNvQVk8AxWDiD73tHUUKDnkMoKSkHPnEnsCInGHr4iTYE2zp8/uEBFxNppq5SP9gQOzE2qekGket2co0W/+jKNtg63u1udlZjo=&quot;,&quot;R&quot;:[&quot;OpuoX8xEvGaULH7ir3G/W9zBB1gmYN6lllJsk8+QGGQxydbrtoQiFfhU1Tyqm59sq3GIhksiYB6Th6jYq3BIFKVynX993FPYU2HS2dceFk5kvymIx33u2nTyMzFvox2b6IkKHKXfbtx/VWWlVYcywFOAOiQ1Xa7dXDx1ebuGowE=&quot;,&quot;Jamoy887kQjyTKjHwgFGxOKugcGIxdUhK9pE/nDTFttU6ndo5qm04AVB5n4WUaFurrKlNSIICheAXI10kIy37Ogr1N4Ge/7TbyZ/hXB8DBzoJbD3MVpXblq9hrhEkb+yyJ9uipnKckflQBWGzl+grXV17SWVhd5TKpUrMw1cDYs=&quot;,&quot;YGogpko2T4xWQjipZN691tpWJYffyX5evzh2EJAZSpP3evnMbro0Et5Bk+2NY9yt/GoJW8qkVkwEdaYU0jQiGS27F3aJ5e00VOCnZ6bIXJKgcTTxqc5c9NrpJVWNX9n5G590OVTNqlLUOFw3/mIY26A2MKxsa56j2K0V4IM0FI4=&quot;,&quot;Jca8++mT6d93MK0S8Fb6rtu7TpV9TGqM0mSvO0JKuyRvEro3anRbvZ8sHRLt2q2ePIyCQHz2eUc4iJ1vQLnzMxVavQ3xS5AAS27Tw+xM64JhWV6BFDqZgaEcu22jEi+Rrjjqss2nmC6CQYJZt5g5P0dXGV2JKDcrUaGCtzc4cNE=&quot;,&quot;ZIV6MWKglRL5B9vv5RmBigbieiuebmy/mcpycXlyQcoZEeNCzuGs/JgRnGr05umbcsQ5ZNSS3TKiL5CM/Z4fanuSu6jNnVoHvSkxI3x28ZpMV8C43CXkS6smmiZP+2SSL419Q247ZbP04T5wHcZ6GooCLxnfx5DeEtRze3UU1Wk=&quot;,&quot;IbwQtY9iF7C/rNKkTilHP5jEj9r3aI1tRVU9WeMzE9yxrE0mggzpcoCM0lJFLcqVyWhKD3PWssuXwNiLJipUL+sH/u8Qk8Bu6sv/USlUU7sgSJ4akl2Lp+5oYSkzHiZTeJtLg0OVGZnka3pGxzg0ihkkT6Bdk8K2OicTNxlHzgI=&quot;,&quot;ZQ9/qIgvOx/8dyXlAFeZH+2lriSPaj/NDzPCxR9sXqBYJskSkSrdGogxP2RZeAGyDh7NvwUtvBDQ/vLKz/O3ANPUOnaRx1n4uBF+uBdt0h3Ml/DckhL5k2+nHQsnZWPFxkdpatCIFWcvYuldx+gXLePBaRmNnKMoxAgT+tJnJcw=&quot;,&quot;ZGfBOqHujseUhLZdfs8kq+/kmG3yMwUAmQrGgTdNej8npNsOyD/Am/SoPdSjpr1enuMgBzva/bjn3/z8nncpia65+v9Pn5831UuFp8h53/1WaEHvN/yctnIKb8k1IRtPlSvnfq7qwC/sIGvHq+ZTj3/ie57rTSkSMrmdFL8PMM0=&quot;,&quot;TM38T4ekWiNWICCgry7GsppfVt2ImPv4SL//f/J3beP34K1afJCsHk50XJwi8qyMz8HqEVK2sWvMQzJ8Amct4sAfRYIZNmqH7mSR7LwIXvihwv1dUlJv2R7MLTjEGkEnJHE5cCR0K5GxjeQSSgNHAu33MOth3ipsK9ZmF+slSkI=&quot;,&quot;YwMb/IVn2NsA4y8ZiiBxCWoOg0tsqyYKTakxDZnRhw+wHwhnA3+T87X4tOSAx+dYlmtj3UQzUAeFRYztr2YTrF2boS/YFeAiVh6swPgFOScvmOuf5O4fJn7z+iXr+ivgFccswxBhxqa9MdF8ReqHaVouj8LLyk33fZgWduwfnA==&quot;],&quot;EpochLength&quot;:432000,&quot;Params&quot;:{&quot;LePrime&quot;:120,&quot;Lh&quot;:256,&quot;Lm&quot;:256,&quot;Ln&quot;:1024,&quot;Lstatzk&quot;:80,&quot;Le&quot;:597,&quot;LeCommit&quot;:456,&quot;LmCommit&quot;:592,&quot;LRA&quot;:1104,&quot;LsCommit&quot;:593,&quot;Lv&quot;:1700,&quot;LvCommit&quot;:2036,&quot;LvPrime&quot;:1104,&quot;LvPrimeCommit&quot;:1440},&quot;Issuer&quot;:&quot;&quot;,&quot;ECDSA&quot;:&quot;MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKvmUz3HIZy890jE78CC9V9BuN8taO+L8GjAeS14v0CL7GCFZ1GMnaSZi4WG3mOjJlJ80CnMowIbUT3Fw1TluFw==&quot;,&quot;NonrevPk&quot;:null}'
+);
+</code></pre>
+<h1><a class="header" href="#attestation" id="attestation">Attestation</a></h1>
+<p>Before the attester can sign the claimer's credential, they have to have initiate the attestation session by generating a nonce which will prevent replay attacks.
+After the claim has been sent to the attester, they sign it and send the signature over to the claimer.
+Then, the claimer can build their credential using the claim and the attester's signature.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant A as Attester
+    participant C as Claimer
+
+    note left of A: The attester chooses two random numbers (context and nonce) and sends them to the claimer.
+    A-&gt;&gt;C: Initiate Attestation
+    note right of C: The claimer commits on their master secret and send their claim to the attester.
+    C-&gt;&gt;A: Attestation Request
+    note left of A: The attester validates and signs the claim and sends the signature back to the claimer.
+    A-&gt;&gt;C: Attestation Response
+    note right of C: The claimer builds their credential using the signature.
+</code></pre>
+<p>Before an attester can create attestations, they have to generate a key pair and publish their public key.</p>
+<pre><code class="language-ts">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
+// Build a new attester.
+// Note: generating a new key pair will take around 10-30 minutes.
+// const attester = await portablegabi.Attester.create(365, 70)
+
+// For this example you could use the provided keys.
+// Note: never use those keys in production!!!
+const attester = new portablegabi.Attester(pubKey, privKey);
+
+// Create a new accumulator (which is used for revocation).
+let accumulator = await attester.createAccumulator();
+console.log(&quot;Accumulator: &quot;, accumulator.valueOf());
+
+// Build a new claimer and generate a new master key.
+// const claimer = await portablegabi.Claimer.create()
+// or use a mnemonic:
+const claimer = await portablegabi.Claimer.buildFromMnemonic(
+  &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
+);
+</code></pre>
+<p>After the attester and claimer have both generated their keys, the attestation session can be initiated by the attester.</p>
+<pre><code class="language-js">// The attester initiates the attestation session.
+const {
+  message: startAttestationMsg,
+  session: attestationSession
+} = await attester.startAttestation();
+
+// The claimer answers with an attestation request.
+const claim = {
+  age: 15,
+  name: &quot;George&quot;
+};
+
+const {
+  message: attestationRequest,
+  session: claimerSession
+} = await claimer.requestAttestation({
+  // The received attestation message.
+  startAttestationMsg,
+  // The claim which should get attested.
+  claim,
+  // The public key of the attester.
+  attesterPubKey: attester.publicKey
+});
+
+// The attester should check the claim they are about to attest.
+const receivedClaim = attestationRequest.getClaim();
+
+// Do checks on receivedClaim.
+// If everything checks out the attester issues an attestation.
+const {
+  // The attestation should be sent over to the claimer.
+  attestation,
+  // The witness should be stored for later revocation.
+  witness
+} = await attester.issueAttestation({
+  attestationSession,
+  attestationRequest,
+  // The update is used to generate a non-revocation witness.
+  accumulator
+});
+console.log(&quot;Witness: &quot;, witness.valueOf());
+
+// After the claimer has received their attestation, they can build their credential.
+const credential = await claimer.buildCredential({
+  claimerSession,
+  attestation
+});
+console.log(&quot;Credential: &quot;, credential.valueOf());
+</code></pre>
+<p>Upon completion of an attestation session, the attester receives a <em>witness</em> which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.
+Note that an attester should store each witness and keep track of the matching claim.</p>
+<h1><a class="header" href="#verification" id="verification">Verification</a></h1>
+<p>During the verification, the verifier requests a set of attributes from the claimer.
+The claimer discloses their attributes and provides a proof (referred to as presentation).
+The verifier can then validate that the attributes are signed by a trusted attester using the claimer's presentation.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant V as Verifier
+    participant C as Claimer
+
+    V-&gt;&gt;C: (Combined-)Presentation Request
+    note right of C: The Claimer selects a credential and confirms the requested attributes.
+    C-&gt;&gt;V: (Combined-)Presentation Response
+    Note left of V: The verifier validates the proof and reads the attributes.
+</code></pre>
+<p>The claimer is required to have both a credential and the public key of the attester who signed it.
+On the other hand, the verifier needs to trust the attester who signed the credential and their latest accumulator.</p>
+<h3><a class="header" href="#accumulator-timestamps" id="accumulator-timestamps">Accumulator timestamps</a></h3>
+<p>However, new versions of accumulators could be added to the chain quite frequently.
+The worst case would be, that the claimer needs to update their credential before every verification.
+To prevent this, <strong>a verifier can signal the claimer that they accept not only the newest accumulator, but also accumulators which are more recent than a specified point in time</strong>. This timestamp is set using the <code>reqUpdatedAfter</code> parameter.</p>
+<p>If the verifier sends the current time, the claimer most likely has to check for the newest accumulator.
+During the verification, the verifier needs to decide on a latest accumulator.
+This is done using the <code>latestAccumulator</code> parameter.
+If the claimer sends a newer accumulator than <code>latestAccumulator</code>, the verifier accepts this accumulator automatically as it's timestamp is greater than the required one.</p>
+<p>In short: <strong>the verifier accepts an accumulator if it is newer than the newest accumulator they know of</strong> or <strong>if it was created after <code>reqUpdatedAfter</code></strong>.</p>
+<p>For more details about the accumulator, have a look at the next <a href="./4_revocation.html">section</a>.</p>
+<h2><a class="header" href="#example" id="example">Example</a></h2>
+<pre><code class="language-ts">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
+
+const claimer = await portablegabi.Claimer.buildFromMnemonic(
+  &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
+);
+
+const credential = new portablegabi.Credential(
+  &quot;&lt;The credential created during the attestation&gt;&quot;
+);
+const accumulator = new portablegabi.Accumulator(
+  &quot;&lt;The accumulator created during the attestation&gt;&quot;
+);
+const pubKey = new portablegabi.AttesterPublicKey(
+  &quot;&lt;Public key of the attester&gt;&quot;
+);
+
+// The verifier request a presentation.
+const {
+  // Local information used to verify the presentation later.
+  session: verifierSession,
+  // The request which should be sent to the claimer containing the requested attributes.
+  message: presentationReq
+} = await portablegabi.Verifier.requestPresentation({
+  // Specify which attributes should be disclosed.
+  requestedAttributes: [&quot;age&quot;],
+  // The threshold for the age of the accumulator.
+  // If the accumulator was created before this date, the proof will be rejected
+  // except if the accumulator is the newest available accumulator.
+  reqUpdatedAfter: new Date()
+});
+
+// After the claimer has received the presentationRequest, they build a presentation:
+const presentation = await claimer.buildPresentation({
+  credential,
+  presentationReq,
+  attesterPubKey: pubKey
+});
+
+// The presentation is sent over to the verifier who validates the proof and extracts the claim.
+const {
+  // The contained claim, this value is undefined if the proof could not be validated.
+  claim,
+  // A boolean which indicates whether the presentation was valid.
+  verified
+} = await portablegabi.Verifier.verifyPresentation({
+  // The presentation which was sent over by the claimer.
+  proof: presentation,
+  verifierSession,
+  // The public key which was used by the attester to sign the credential.
+  attesterPubKey: pubKey,
+  // This accumulator is used to check whether the claimer provided the newest available accumulator.
+  latestAccumulator: accumulator
+});
+console.log(&quot;Claim: &quot;, claim);
+console.log(&quot;Verified? &quot;, verified);
+</code></pre>
+<h1><a class="header" href="#revocation-1" id="revocation-1">Revocation</a></h1>
+<p>An attester can revoke any credential they attested.
+This is achieved by using a witness which is contained inside a credential and a whitelist containing all non-revoked witnesses.
+If an attester revokes a credential, they remove the associated witness from the whitelist and publish a new version of this whitelist.
+Note that <strong>witnesses are added to the whitelist implicitly</strong>.
+Therefore, adding witnesses to the whitelist requires no change.
+Since this whitelist is implemented using accumulators, it is called <em>accumulator</em>.
+Further documentation on how this accumulator works can be found in the <a href="https://irma.app/docs/revocation/#cryptography">IRMA docs</a>.</p>
+<h2><a class="header" href="#example-1" id="example-1">Example</a></h2>
+<p>In order to revoke a credential, the attester needs their key pair, the witness of credential they want to revoke (created in <code>issueAttestation</code>) and the accumulator.</p>
+<pre><code class="language-js">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
+
+const attester = new portablegabi.Attester(pubKey, privKey);
+const accPreRevo = await attester.createAccumulator();
+
+// Issue attestations and store witnesses.
+const accPostRevo = await attester.revokeAttestation({
+  accumulator: accPreRevo,
+  // The list of witnesses associated with the credentials which should get revoked.
+  witnesses: [witness0, witness2, witness3]
+});
+// Publish accPostRevo.
+</code></pre>
+<p>After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to their newest available accumulator.
+In order to update the credential, <strong>the claimer needs the complete history of all new accumulators since their last update</strong>.</p>
+<pre><code class="language-ts">const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
+let credential = () =&gt; {
+    // Request an attestation from an attester.
+    // Build a credential.
+    // ...
+    return credential
+}()
+
+// How to update your credential?
+// The Credential is updated to accumulator 55, the newest accumulator has index 59.
+const newCredential = await credential.update({
+    attesterPubKey: attestersPublicKey,
+    accumulators: [accumulator56, accumulator57, accumulator58, accumulator59],
+})
+</code></pre>
+<h1><a class="header" href="#blockchain" id="blockchain">Blockchain</a></h1>
+<p>Although you are free to choose how you would like to provide access to accumulators, we suggest that you use a blockchain for that.
+The advantage of using a blockchain is that you have a decentralized database.
+If each attester operated their own servers for providing accumulators, these servers would become a single point of failure.
+If a server is not reachable, the verifier cannot check if a credential was recently revoked.
+Another concern of a centralised approach is the privacy of the claimer.
+Since the attester operates the server where the accumulator is stored, they can also track how often a claimer updates their credential.
+A blockchain can prevent attesters from tracking claimers and provides a redundant storage.</p>
+<h3><a class="header" href="#build-the-chain" id="build-the-chain">Build the chain</a></h3>
+<p>If you want to use a blockchain, you can integrate our <a href="https://github.com/KILTprotocol/portablegabi-pallet"><code>portablegabi pallet</code></a> into your <a href="https://www.parity.io/substrate/">substrate blockchain</a>.
+We also provide a blockchain template which includes our pallet and can be used to store accumulators.
+In order to use that, just clone and set up the <a href="https://github.com/KILTprotocol/portablegabi-node"><code>portablegabi-node</code></a> or use the template to create your own project.</p>
+<pre><code class="language-bash">git clone https://github.com/KILTprotocol/portablegabi-node.git
+cd portablegabi-node
+./scripts/init.sh
+cargo build
+</code></pre>
+<p>You might want to grab a cup of tee! 🍵
+Building the chain might take up to 30 min.</p>
+<h3><a class="header" href="#start-the-chain" id="start-the-chain">Start the chain</a></h3>
+<pre><code class="language-bash">./target/release/node-portablegabi --dev
+</code></pre>
+<h1><a class="header" href="#run-examples" id="run-examples">Run examples</a></h1>
+<p>The purpose of the chain is to both store each attester's accumulator and give access to old revisions, as these are required when updating older credentials.
+Therefore, we have added some chain functionality to both the credential and attester classes.</p>
+<h2><a class="header" href="#example-1-complete-process-for-single-credential-with-revocation" id="example-1-complete-process-for-single-credential-with-revocation">Example 1: Complete process for single credential with revocation</a></h2>
+<p>In the following, we will run a complete exemplary chain process:</p>
+<ol>
+<li>Connect to the chain and add an accumulator.</li>
+<li>Attest a claim.</li>
+<li>Revoke the attested claim from 2. and (automatically) update the accumulator.</li>
+<li>Check out multiple verifications with different timestamps.</li>
+</ol>
+<pre><code class="language-javascript">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+
+const privKey = new portablegabi.AttesterPrivateKey(&quot;...&quot;);
+const pubKey = new portablegabi.AttesterPublicKey(&quot;...&quot;);
+
+async function exec() {
+  /** (1) Chain phase */
+  // (1.1) Connect to the chain.
+  const chain = await portablegabi.connect({
+    pgabiModName: &quot;portablegabiPallet&quot;
+  });
+  console.log(&quot;Connected to chain&quot;);
+
+  // (1.2) Create Alice identity.
+  const attester = await portablegabi.AttesterChain.buildFromURI(
+    pubKey,
+    privKey,
+    &quot;//Alice&quot;
+  );
+
+  // (1.3) Create a fresh accumulator.
+  const accPreRevo = await attester.createAccumulator();
+
+  // (1.4) Put the accumulator on chain.
+  await attester.updateAccumulator(accPreRevo);
+
+  // Check whether it has actually been added to chain.
+  // We need to wait for next block since updating the accumulator is a transaction.
+  await chain.waitForNextBlock();
+  console.log(
+    &quot;Latest accumulator === accPreRevo? Expected true, received&quot;,
+    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
+      accPreRevo.valueOf()
+  );
+
+  /** (2) Attestation phase */
+  // (2.1) The attester initiates the attestation session.
+  const {
+    message: startAttestationMsg,
+    session: attestationSession
+  } = await attester.startAttestation();
+
+  // (2.2) The claimer answers with an attestation request.
+  const claimer = await portablegabi.Claimer.buildFromMnemonic(
+    &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
+  );
+  const claim = {
+    name: &quot;George Ericson&quot;,
+    age: 24,
+    drivers_license: {
+      id: &quot;127128204193&quot;,
+      category: &quot;B2&quot;,
+      licensing_authority: &quot;Berlin A52452&quot;
+    }
+  };
+  const {
+    message: attestationRequest,
+    session: claimerSession
+  } = await claimer.requestAttestation({
+    // the received attestation message
+    startAttestationMsg,
+    // the claim which should get attested
+    claim,
+    // the public key of the attester
+    attesterPubKey: attester.publicKey
+  });
+
+  // (2.3) The attester issues an attestation.
+  const {
+    // The attestation should be sent over to the claimer.
+    attestation,
+    // The witness should be stored for later revocation.
+    witness
+  } = await attester.issueAttestation({
+    attestationSession,
+    attestationRequest,
+    // The update is used to generate a non-revocation witness.
+    accumulator: accPreRevo
+  });
+  const credential = await claimer.buildCredential({
+    claimerSession,
+    attestation
+  });
+
+  /** (3) Revocation phase */
+
+  // Revoke the attestation and receive a new accumulator whitelist.
+  const accPostRevo = await attester.revokeAttestation({
+    witnesses: [witness],
+    accumulator: accPreRevo
+  });
+  // Check whether accPostRevo is the latest accumulator on chain.
+  await chain.waitForNextBlock();
+  console.log(
+    &quot;Latest accumulator === accPostRevo? Expected true, received&quot;,
+    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
+      accPostRevo.valueOf()
+  );
+
+  /** (4) Verification phase */
+  // Get the exact timestamp of the revocation for simplicity.
+  const timeAtRev = await accPostRevo.getDate(attester.publicKey);
+
+  // (4.1) The verifier sends a nonce and context to the claimer and requests disclosed attributes.
+  // Note: the requested timestamp at revocation
+  const {
+    session: verifierSession,
+    message: presentationReq
+  } = await portablegabi.Verifier.requestPresentation({
+    requestedAttributes: [&quot;age&quot;, &quot;drivers_license.category&quot;],
+    reqUpdatedAfter: timeAtRev
+  });
+
+  // (4.2) The claimer builds a presentation with the revoked credential.
+  // Note: They need to update as the credential was build before timeAtRev.
+  const presentation = await claimer
+    .buildPresentation({
+      credential,
+      presentationReq,
+      attesterPubKey: attester.publicKey
+    })
+    .catch(() =&gt; {
+      console.log(
+        &quot;Caught expected error when building presentation due to credential not matching the required timestamp&quot;
+      );
+      const updatedCredential = credential.updateFromChain({
+        attesterPubKey: attester.publicKey,
+        attesterChainAddress: attester.address
+      });
+      return claimer.buildPresentation({
+        credential: updatedCredential,
+        presentationReq,
+        attesterPubKey: attester.publicKey
+      });
+    });
+
+  // (4.3) The verifier checks the presentation for non-revocation, valid data and matching attester's public key.
+  // We expect success because the credential is still valid in accPreRevo.
+  const {
+    verified: verifiedRev0
+  } = await portablegabi.Verifier.verifyPresentation({
+    proof: presentation,
+    verifierSession,
+    attesterPubKey: attester.publicKey,
+    latestAccumulator: accPreRevo
+  });
+  // We expect failure because the credential is invalid in accPostRevo.
+  const {
+    verified: verifiedRev1
+  } = await portablegabi.Verifier.verifyPresentation({
+    proof: presentation,
+    verifierSession,
+    attesterPubKey: attester.publicKey,
+    latestAccumulator: accPostRevo
+  });
+  console.log(
+    &quot;Cred verified w/ timestamp at revocation and old accumulator? Expected true, received&quot;,
+    verifiedRev0
+  );
+  console.log(
+    &quot;Cred verified w/ timestamp at revocation and new accumulator? Expected false, received&quot;,
+    verifiedRev1
+  );
+}
+exec()
+  .catch(e =&gt; console.log(e))
+  .finally(() =&gt; process.exit(1));
+</code></pre>
+<h1><a class="header" href="#development" id="development">Development</a></h1>
+<p>If you want to help develop portablegabi, we would be glad to merge your pull request.
+But first, you need to set up a development environment for our project.
+For that, start with installing the following dependencies:</p>
+<ul>
+<li><a href="https://nodejs.org/en/">node</a> (any version starting with 10.19)</li>
+<li><a href="https://yarnpkg.com/getting-started">yarn</a></li>
+<li><a href="https://golang.org/doc/install">go</a> (version 1.13 or newer)</li>
+<li><a href="https://github.com/golang/dep">go dep</a></li>
+</ul>
+<p>Make sure you <a href="https://github.com/golang/go/wiki/SettingGOPATH">set up your</a> <code>GOPATH</code> directory and environment variables.</p>
+<p>After you are done, clone the <a href="https://github.com/KILTprotocol/portablegabi">portablegabi project</a> into the correct go path:</p>
+<pre><code class="language-bash">mkdir -p $GOPATH/src/github.com/KILTprotocol/
+git clone https://github.com/KILTprotocol/portablegabi.git \
+  $GOPATH/src/github.com/KILTprotocol/portablegabi
+cd $GOPATH/src/github.com/KILTprotocol/portablegabi
+</code></pre>
+<p>Next, you need to install all the node dependencies, build the Portablegabi WASM and transpile the Typescript code:</p>
+<pre><code class="language-bash">yarn install
+yarn build
+</code></pre>
+<p>To ensure everything went fine, you can execute any of the provided examples:</p>
+<pre><code class="language-bash">yarn ts-node docs/examples/exampleSingle.ts
+</code></pre>
+<p>You can use the Portablegabi version you have just built by running <code>yarn link</code> inside the Portablegabi project and <code>yarn link @kiltprotocol/portablegabi</code> in the project where you want to use Portablegabi.</p>
+<h2><a class="header" href="#optional-test-with-substrate-chain" id="optional-test-with-substrate-chain">Optional: Test with Substrate chain</a></h2>
+<p>If you want to test the examples with a blockchain, you will also need to install <a href="https://rustup.rs">rust</a> and <a href="https://substrate.dev/docs/en/getting-started/installing-substrate">Substrate</a>.
+For more information about setting up a chain to be used with the Portablegabi API, see the exemplary <a href="https://github.com/KILTprotocol/portablegabi-node"><code>portablegabi-node</code></a>.
+For code examples of the Portablegabi chain API, please have a look at our <a href="https://github.com/KILTprotocol/portablegabi/tree/develop/docs/examples">chain examples</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="mermaid-init.js"></script>
+        
+        <script type="text/javascript" src="highlight.js"></script>
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>
