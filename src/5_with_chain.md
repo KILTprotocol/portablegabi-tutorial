@@ -45,61 +45,61 @@ In the following, we will run a complete exemplary chain process:
 4. Check out multiple verifications with different timestamps.
 
 ```javascript
-const portablegabi = require('@kiltprotocol/portablegabi')
+const portablegabi = require("@kiltprotocol/portablegabi");
 
-const privKey = new portablegabi.AttesterPrivateKey('...')
-const pubKey = new portablegabi.AttesterPublicKey('...')
+const privKey = new portablegabi.AttesterPrivateKey("...");
+const pubKey = new portablegabi.AttesterPublicKey("...");
 
-async function exec () {
+async function exec() {
   /** (1) Chain phase */
   // (1.1) Connect to the chain.
   const chain = await portablegabi.connect({
-    pgabiModName: 'portablegabiPallet'
-  })
-  console.log('Connected to chain')
+    pgabiModName: "portablegabiPallet"
+  });
+  console.log("Connected to chain");
 
   // (1.2) Create Alice identity.
   const attester = await portablegabi.AttesterChain.buildFromURI(
     pubKey,
     privKey,
-    '//Alice'
-  )
+    "//Alice"
+  );
 
   // (1.3) Create a fresh accumulator.
-  const accumulator0 = await attester.createAccumulator()
+  const accPreRevo = await attester.createAccumulator();
 
   // (1.4) Put the accumulator on chain.
-  await attester.updateAccumulator(accumulator0)
+  await attester.updateAccumulator(accPreRevo);
 
   // Check whether it has actually been added to chain.
   // We need to wait for next block since updating the accumulator is a transaction.
-  await chain.waitForNextBlock()
+  await chain.waitForNextBlock();
   console.log(
-    'Latest accumulator === accumulator0? Expected true, received',
+    "Latest accumulator === accPreRevo? Expected true, received",
     (await chain.getLatestAccumulator(attester.address)).valueOf() ===
-      accumulator0.valueOf()
-  )
+      accPreRevo.valueOf()
+  );
 
   /** (2) Attestation phase */
   // (2.1) The attester initiates the attestation session.
   const {
     message: startAttestationMsg,
     session: attestationSession
-  } = await attester.startAttestation()
+  } = await attester.startAttestation();
 
   // (2.2) The claimer answers with an attestation request.
   const claimer = await portablegabi.Claimer.buildFromMnemonic(
-    'siege decrease quantum control snap ride position strategy fire point airport include'
-  )
+    "siege decrease quantum control snap ride position strategy fire point airport include"
+  );
   const claim = {
-    name: 'George Ericson',
+    name: "George Ericson",
     age: 24,
     drivers_license: {
-      id: '127128204193',
-      category: 'B2',
-      licensing_authority: 'Berlin A52452'
+      id: "127128204193",
+      category: "B2",
+      licensing_authority: "Berlin A52452"
     }
-  }
+  };
   const {
     message: attestationRequest,
     session: claimerSession
@@ -110,7 +110,7 @@ async function exec () {
     claim,
     // the public key of the attester
     attesterPubKey: attester.publicKey
-  })
+  });
 
   // (2.3) The attester issues an attestation.
   const {
@@ -122,31 +122,31 @@ async function exec () {
     attestationSession,
     attestationRequest,
     // The update is used to generate a non-revocation witness.
-    accumulator: accumulator0
-  })
+    accumulator: accPreRevo
+  });
   const credential = await claimer.buildCredential({
     claimerSession,
     attestation
-  })
+  });
 
   /** (3) Revocation phase */
 
   // Revoke the attestation and receive a new accumulator whitelist.
-  const accumulator1 = await attester.revokeAttestation({
+  const accPostRevo = await attester.revokeAttestation({
     witnesses: [witness],
-    accumulator: accumulator0
-  })
-  // Check whether accumulator1 is the latest accumulator on chain.
-  await chain.waitForNextBlock()
+    accumulator: accPreRevo
+  });
+  // Check whether accPostRevo is the latest accumulator on chain.
+  await chain.waitForNextBlock();
   console.log(
-    'Latest accumulator === accumulator1? Expected true, received',
+    "Latest accumulator === accPostRevo? Expected true, received",
     (await chain.getLatestAccumulator(attester.address)).valueOf() ===
-      accumulator1.valueOf()
-  )
+      accPostRevo.valueOf()
+  );
 
   /** (4) Verification phase */
   // Get the exact timestamp of the revocation for simplicity.
-  const timeAtRev = await accumulator1.getDate(attester.publicKey)
+  const timeAtRev = await accPostRevo.getDate(attester.publicKey);
 
   // (4.1) The verifier sends a nonce and context to the claimer and requests disclosed attributes.
   // Note: the requested timestamp at revocation
@@ -154,9 +154,9 @@ async function exec () {
     session: verifierSession,
     message: presentationReq
   } = await portablegabi.Verifier.requestPresentation({
-    requestedAttributes: ['age', 'drivers_license.category'],
+    requestedAttributes: ["age", "drivers_license.category"],
     reqUpdatedAfter: timeAtRev
-  })
+  });
 
   // (4.2) The claimer builds a presentation with the revoked credential.
   // Note: They need to update as the credential was build before timeAtRev.
@@ -168,48 +168,48 @@ async function exec () {
     })
     .catch(() => {
       console.log(
-        'Caught expected error when building presentation due to credential not matching the required timestamp'
-      )
+        "Caught expected error when building presentation due to credential not matching the required timestamp"
+      );
       const updatedCredential = credential.updateFromChain({
         attesterPubKey: attester.publicKey,
         attesterChainAddress: attester.address
-      })
+      });
       return claimer.buildPresentation({
         credential: updatedCredential,
         presentationReq,
         attesterPubKey: attester.publicKey
-      })
-    })
+      });
+    });
 
   // (4.3) The verifier checks the presentation for non-revocation, valid data and matching attester's public key.
-  // We expect success because the credential is still valid in accumulator0.
+  // We expect success because the credential is still valid in accPreRevo.
   const {
     verified: verifiedRev0
   } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
     attesterPubKey: attester.publicKey,
-    latestAccumulator: accumulator0
-  })
-  // We expect failure because the credential is invalid in accumulator1.
+    latestAccumulator: accPreRevo
+  });
+  // We expect failure because the credential is invalid in accPostRevo.
   const {
     verified: verifiedRev1
   } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
     attesterPubKey: attester.publicKey,
-    latestAccumulator: accumulator1
-  })
+    latestAccumulator: accPostRevo
+  });
   console.log(
-    'Cred verified w/ timestamp at revocation and old accumulator? Expected true, received',
+    "Cred verified w/ timestamp at revocation and old accumulator? Expected true, received",
     verifiedRev0
-  )
+  );
   console.log(
-    'Cred verified w/ timestamp at revocation and new accumulator? Expected false, received',
+    "Cred verified w/ timestamp at revocation and new accumulator? Expected false, received",
     verifiedRev1
-  )
+  );
 }
 exec()
   .catch(e => console.log(e))
-  .finally(() => process.exit(1))
+  .finally(() => process.exit(1));
 ```
