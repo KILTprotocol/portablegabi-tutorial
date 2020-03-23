@@ -17,7 +17,7 @@ jobs:
           mdbook-version: 'latest'
 
       - name: build
-        run:
+        run: |
           cargo install mdbook-mermaid
           mdbook build
 
