@@ -16,9 +16,10 @@ jobs:
         with:
           mdbook-version: 'latest'
 
-      - run: |
-        cargo install mdbook-mermaid
-        mdbook build
+      - name: build
+        run:
+          cargo install mdbook-mermaid
+          mdbook build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
