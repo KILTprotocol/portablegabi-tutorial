@@ -94,41 +94,40 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">Portablegabi Tutorial</h1>
+                    <h1 class="menu-title">Portablegabi Tutorial</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                            <a href="https://github.com/KILTprotocol/portablegabi" title="Git repository" aria-label="Git repository">
-                                <i id="git-repository-button" class="fa fa-github"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/KILTprotocol/portablegabi" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -239,18 +238,18 @@ const pubKey = new portablegabi.AttesterPublicKey(
 <p>Before the attester can sign the claimer's credential, they have to have initiate the attestation session by generating a nonce which will prevent replay attacks.
 After the claim has been sent to the attester, they sign it and send the signature over to the claimer.
 Then, the claimer can build their credential using the claim and the attester's signature.</p>
-<pre><code class="language-mermaid">sequenceDiagram
+<pre class="mermaid">sequenceDiagram
     participant A as Attester
     participant C as Claimer
 
     note left of A: The attester chooses two random numbers (context and nonce) and sends them to the claimer.
-    A-&gt;&gt;C: Initiate Attestation
+    A->>C: Initiate Attestation
     note right of C: The claimer commits on their master secret and send their claim to the attester.
-    C-&gt;&gt;A: Attestation Request
+    C->>A: Attestation Request
     note left of A: The attester validates and signs the claim and sends the signature back to the claimer.
-    A-&gt;&gt;C: Attestation Response
+    A->>C: Attestation Response
     note right of C: The claimer builds their credential using the signature.
-</code></pre>
+</pre>
 <p>Before an attester can create attestations, they have to generate a key pair and publish their public key.</p>
 <pre><code class="language-ts">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
 // Build a new attester.
@@ -328,15 +327,15 @@ Note that an attester should store each witness and keep track of the matching c
 <p>During the verification, the verifier requests a set of attributes from the claimer.
 The claimer discloses their attributes and provides a proof (referred to as presentation).
 The verifier can then validate that the attributes are signed by a trusted attester using the claimer's presentation.</p>
-<pre><code class="language-mermaid">sequenceDiagram
+<pre class="mermaid">sequenceDiagram
     participant V as Verifier
     participant C as Claimer
 
-    V-&gt;&gt;C: (Combined-)Presentation Request
+    V->>C: (Combined-)Presentation Request
     note right of C: The Claimer selects a credential and confirms the requested attributes.
-    C-&gt;&gt;V: (Combined-)Presentation Response
+    C->>V: (Combined-)Presentation Response
     Note left of V: The verifier validates the proof and reads the attributes.
-</code></pre>
+</pre>
 <p>The claimer is required to have both a credential and the public key of the attester who signed it.
 On the other hand, the verifier needs to trust the attester who signed the credential and their latest accumulator.</p>
 <h3><a class="header" href="#accumulator-timestamps" id="accumulator-timestamps">Accumulator timestamps</a></h3>
