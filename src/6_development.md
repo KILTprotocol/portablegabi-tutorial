@@ -6,7 +6,7 @@ For that, start with installing the following dependencies:
 
 - [node](https://nodejs.org/en/) (any version starting with 10.19)
 - [yarn](https://yarnpkg.com/getting-started)
-- [go](https://golang.org/doc/install) (version 1.13 or newer)
+- [go](https://golang.org/doc/install) (version 1.14 or newer)
 - [go dep](https://github.com/golang/dep)
 
 Make sure you [set up your](https://github.com/golang/go/wiki/SettingGOPATH) `GOPATH` directory and environment variables.
