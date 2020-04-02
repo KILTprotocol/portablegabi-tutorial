@@ -21,7 +21,7 @@ sequenceDiagram
 Before an attester can create attestations, they have to generate a key pair and publish their public key.
 
 ```ts
-const portablegabi = require("@KILTprotocol/portablegabi");
+const portablegabi = require("@kiltprotocol/portablegabi");
 // Build a new attester.
 // Note: generating a new key pair will take around 10-30 minutes.
 // const attester = await portablegabi.Attester.create(365, 70)

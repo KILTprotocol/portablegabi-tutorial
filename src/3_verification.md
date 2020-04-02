@@ -36,7 +36,7 @@ For more details about the accumulator, have a look at the next [section](./4_re
 ## Example
 
 ```ts
-const portablegabi = require("@KILTprotocol/portablegabi");
+const portablegabi = require("@kiltprotocol/portablegabi");
 
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
   "siege decrease quantum control snap ride position strategy fire point airport include"

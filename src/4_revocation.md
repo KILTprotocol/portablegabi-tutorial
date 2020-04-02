@@ -13,7 +13,7 @@ Further documentation on how this accumulator works can be found in the [IRMA do
 In order to revoke a credential, the attester needs their key pair, the witness of credential they want to revoke (created in `issueAttestation`) and the accumulator.
 
 ```js
-const portablegabi = require("@KILTprotocol/portablegabi");
+const portablegabi = require("@kiltprotocol/portablegabi");
 
 const attester = new portablegabi.Attester(pubKey, privKey);
 const accPreRevo = await attester.createAccumulator();
