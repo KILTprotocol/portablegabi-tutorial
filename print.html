@@ -251,7 +251,7 @@ Then, the claimer can build their credential using the claim and the attester's 
     note right of C: The claimer builds their credential using the signature.
 </pre>
 <p>Before an attester can create attestations, they have to generate a key pair and publish their public key.</p>
-<pre><code class="language-ts">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
+<pre><code class="language-ts">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 // Build a new attester.
 // Note: generating a new key pair will take around 10-30 minutes.
 // const attester = await portablegabi.Attester.create(365, 70)
@@ -349,7 +349,7 @@ If the claimer sends a newer accumulator than <code>latestAccumulator</code>, th
 <p>In short: <strong>the verifier accepts an accumulator if it is newer than the newest accumulator they know of</strong> or <strong>if it was created after <code>reqUpdatedAfter</code></strong>.</p>
 <p>For more details about the accumulator, have a look at the next <a href="./4_revocation.html">section</a>.</p>
 <h2><a class="header" href="#example" id="example">Example</a></h2>
-<pre><code class="language-ts">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
+<pre><code class="language-ts">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
   &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
@@ -415,7 +415,7 @@ Since this whitelist is implemented using accumulators, it is called <em>accumul
 Further documentation on how this accumulator works can be found in the <a href="https://irma.app/docs/revocation/#cryptography">IRMA docs</a>.</p>
 <h2><a class="header" href="#example-1" id="example-1">Example</a></h2>
 <p>In order to revoke a credential, the attester needs their key pair, the witness of credential they want to revoke (created in <code>issueAttestation</code>) and the accumulator.</p>
-<pre><code class="language-js">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
 const attester = new portablegabi.Attester(pubKey, privKey);
 const accPreRevo = await attester.createAccumulator();

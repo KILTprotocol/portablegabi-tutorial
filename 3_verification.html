@@ -179,7 +179,7 @@ If the claimer sends a newer accumulator than <code>latestAccumulator</code>, th
 <p>In short: <strong>the verifier accepts an accumulator if it is newer than the newest accumulator they know of</strong> or <strong>if it was created after <code>reqUpdatedAfter</code></strong>.</p>
 <p>For more details about the accumulator, have a look at the next <a href="./4_revocation.html">section</a>.</p>
 <h2><a class="header" href="#example" id="example">Example</a></h2>
-<pre><code class="language-ts">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
+<pre><code class="language-ts">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
   &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;

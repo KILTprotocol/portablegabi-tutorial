@@ -163,7 +163,7 @@ Since this whitelist is implemented using accumulators, it is called <em>accumul
 Further documentation on how this accumulator works can be found in the <a href="https://irma.app/docs/revocation/#cryptography">IRMA docs</a>.</p>
 <h2><a class="header" href="#example" id="example">Example</a></h2>
 <p>In order to revoke a credential, the attester needs their key pair, the witness of credential they want to revoke (created in <code>issueAttestation</code>) and the accumulator.</p>
-<pre><code class="language-js">const portablegabi = require(&quot;@KILTprotocol/portablegabi&quot;);
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
 const attester = new portablegabi.Attester(pubKey, privKey);
 const accPreRevo = await attester.createAccumulator();
