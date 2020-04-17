@@ -82,8 +82,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="affix "><a href="0a_introduction.html">Introduction</a></li><li class="expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="expanded "><a href="2_attestation.html" class="active"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class=""><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class=""><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class=""><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class=""><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="0a_introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2_attestation.html" class="active"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class="chapter-item "><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class="chapter-item "><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class="chapter-item "><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class="chapter-item "><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -170,18 +170,24 @@ Then, the claimer can build their credential using the claim and the attester's 
     note right of C: The claimer builds their credential using the signature.
 </pre>
 <p>Before an attester can create attestations, they have to generate a key pair and publish their public key.</p>
-<pre><code class="language-ts">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 // Build a new attester.
 // Note: generating a new key pair will take around 10-30 minutes.
 // const attester = await portablegabi.Attester.create(365, 70)
 
 // For this example you could use the provided keys.
 // Note: never use those keys in production!!!
+const pubKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
+);
+const privKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated private key of the attester&gt;&quot;
+);
 const attester = new portablegabi.Attester(pubKey, privKey);
 
 // Create a new accumulator (which is used for revocation).
 let accumulator = await attester.createAccumulator();
-console.log(&quot;Accumulator: &quot;, accumulator.valueOf());
+console.log(&quot;Accumulator:\n\t&quot;, accumulator.valueOf());
 
 // Build a new claimer and generate a new master key.
 // const claimer = await portablegabi.Claimer.create()
@@ -189,9 +195,8 @@ console.log(&quot;Accumulator: &quot;, accumulator.valueOf());
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
   &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
 );
-</code></pre>
-<p>After the attester and claimer have both generated their keys, the attestation session can be initiated by the attester.</p>
-<pre><code class="language-js">// The attester initiates the attestation session.
+
+// The attester initiates the attestation session.
 const {
   message: startAttestationMsg,
   session: attestationSession
@@ -217,6 +222,7 @@ const {
 
 // The attester should check the claim they are about to attest.
 const receivedClaim = attestationRequest.getClaim();
+console.log(&quot;Claim built from attestation\n\t&quot;, receivedClaim);
 
 // Do checks on receivedClaim.
 // If everything checks out the attester issues an attestation.
@@ -231,14 +237,14 @@ const {
   // The update is used to generate a non-revocation witness.
   accumulator
 });
-console.log(&quot;Witness: &quot;, witness.valueOf());
+console.log(&quot;Witness:\n\t&quot;, witness.valueOf());
 
 // After the claimer has received their attestation, they can build their credential.
 const credential = await claimer.buildCredential({
   claimerSession,
   attestation
 });
-console.log(&quot;Credential: &quot;, credential.valueOf());
+console.log(&quot;Credential:\n\t&quot;, credential.valueOf());
 </code></pre>
 <p>Upon completion of an attestation session, the attester receives a <em>witness</em> which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.
 Note that an attester should store each witness and keep track of the matching claim.</p>

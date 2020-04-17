@@ -82,8 +82,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="affix "><a href="0a_introduction.html">Introduction</a></li><li class="expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class=""><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class="expanded "><a href="4_revocation.html" class="active"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class=""><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class=""><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="0a_introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class="chapter-item "><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="4_revocation.html" class="active"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class="chapter-item "><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class="chapter-item "><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -165,20 +165,32 @@ Further documentation on how this accumulator works can be found in the <a href=
 <p>In order to revoke a credential, the attester needs their key pair, the witness of credential they want to revoke (created in <code>issueAttestation</code>) and the accumulator.</p>
 <pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
+const pubKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
+);
+const privKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated private key of the attester&gt;&quot;
+);
 const attester = new portablegabi.Attester(pubKey, privKey);
-const accPreRevo = await attester.createAccumulator();
+const accPreRevo = new portablegabi.Accumulator(
+  &quot;&lt;The accumulator created during the attestation&gt;&quot;
+);
+const witnessToBeRevoked = new portablegabi.Witness(
+  &quot;&lt;The witness created during the attestation&gt;&quot;
+);
 
 // Issue attestations and store witnesses.
 const accPostRevo = await attester.revokeAttestation({
   accumulator: accPreRevo,
   // The list of witnesses associated with the credentials which should get revoked.
-  witnesses: [witness0, witness2, witness3]
+  witnesses: [witnessToBeRevoked]
 });
-// Publish accPostRevo.
+console.log(&quot;Accumulator after revocation:\n\t&quot;, accPostRevo.valueOf());
+// Publish the accumulator after revocation.
 </code></pre>
 <p>After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to their newest available accumulator.
 In order to update the credential, <strong>the claimer needs the complete history of all new accumulators since their last update</strong>.</p>
-<pre><code class="language-ts">const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
+<pre><code class="language-js">const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
 let credential = () =&gt; {
     // Request an attestation from an attester.
     // Build a credential.
@@ -188,6 +200,7 @@ let credential = () =&gt; {
 
 // How to update your credential?
 // The Credential is updated to accumulator 55, the newest accumulator has index 59.
+// Note that a user does not have to input the accumulators in a sorted way - Portablegabi takes care of this.
 const newCredential = await credential.update({
     attesterPubKey: attestersPublicKey,
     accumulators: [accumulator56, accumulator57, accumulator58, accumulator59],

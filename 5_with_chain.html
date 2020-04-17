@@ -82,8 +82,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="affix "><a href="0a_introduction.html">Introduction</a></li><li class="expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class=""><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class=""><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class="expanded "><a href="5_with_chain.html" class="active"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class=""><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="0a_introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class="chapter-item "><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class="chapter-item "><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class="chapter-item expanded "><a href="5_with_chain.html" class="active"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class="chapter-item "><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -173,7 +173,7 @@ cargo build
 <p>You might want to grab a cup of tee! 🍵
 Building the chain might take up to 30 min.</p>
 <h3><a class="header" href="#start-the-chain" id="start-the-chain">Start the chain</a></h3>
-<pre><code class="language-bash">./target/release/node-portablegabi --dev
+<pre><code class="language-bash">cargo run -- --dev
 </code></pre>
 <h1><a class="header" href="#run-examples" id="run-examples">Run examples</a></h1>
 <p>The purpose of the chain is to both store each attester's accumulator and give access to old revisions, as these are required when updating older credentials.
@@ -186,10 +186,14 @@ Therefore, we have added some chain functionality to both the credential and att
 <li>Revoke the attested claim from 2. and (automatically) update the accumulator.</li>
 <li>Check out multiple verifications with different timestamps.</li>
 </ol>
-<pre><code class="language-javascript">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
-const privKey = new portablegabi.AttesterPrivateKey(&quot;...&quot;);
-const pubKey = new portablegabi.AttesterPublicKey(&quot;...&quot;);
+const pubKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
+);
+const privKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated private key of the attester&gt;&quot;
+);
 
 async function exec() {
   /** (1) Chain phase */
@@ -197,7 +201,7 @@ async function exec() {
   const chain = await portablegabi.connect({
     pgabiModName: &quot;portablegabiPallet&quot;
   });
-  console.log(&quot;Connected to chain&quot;);
+  console.log(&quot;Successfully connected to the chain&quot;);
 
   // (1.2) Create Alice identity.
   const attester = await portablegabi.AttesterChain.buildFromURI(
@@ -210,11 +214,13 @@ async function exec() {
   const accPreRevo = await attester.createAccumulator();
 
   // (1.4) Put the accumulator on chain.
+  console.log(&quot;Putting accumulator on the chain for Alice&quot;);
   await attester.updateAccumulator(accPreRevo);
 
   // Check whether it has actually been added to chain.
   // We need to wait for next block since updating the accumulator is a transaction.
   await chain.waitForNextBlock();
+  console.log(&quot;\t Waiting for next block to have the accumulator on the chain&quot;);
   console.log(
     &quot;Latest accumulator === accPreRevo? Expected true, received&quot;,
     (await chain.getLatestAccumulator(attester.address)).valueOf() ===
@@ -280,17 +286,20 @@ async function exec() {
   // Check whether accPostRevo is the latest accumulator on chain.
   await chain.waitForNextBlock();
   console.log(
+    &quot;\t Waiting for next block to have the updated accumulator on the chain&quot;
+  );
+  console.log(
     &quot;Latest accumulator === accPostRevo? Expected true, received&quot;,
     (await chain.getLatestAccumulator(attester.address)).valueOf() ===
       accPostRevo.valueOf()
   );
 
   /** (4) Verification phase */
-  // Get the exact timestamp of the revocation for simplicity.
+  // Get the exact timestamp of the revocation for simplicity, also works for dates after accumulator date.
   const timeAtRev = await accPostRevo.getDate(attester.publicKey);
 
   // (4.1) The verifier sends a nonce and context to the claimer and requests disclosed attributes.
-  // Note: the requested timestamp at revocation
+  // Note: The requested timestamp equals the accumulator date.
   const {
     session: verifierSession,
     message: presentationReq
@@ -301,40 +310,31 @@ async function exec() {
 
   // (4.2) The claimer builds a presentation with the revoked credential.
   // Note: They need to update as the credential was build before timeAtRev.
-  const presentation = await claimer
-    .buildPresentation({
-      credential,
-      presentationReq,
-      attesterPubKey: attester.publicKey
-    })
-    .catch(() =&gt; {
-      console.log(
-        &quot;Caught expected error when building presentation due to credential not matching the required timestamp&quot;
-      );
-      const updatedCredential = credential.updateFromChain({
-        attesterPubKey: attester.publicKey,
-        attesterChainAddress: attester.address
-      });
-      return claimer.buildPresentation({
-        credential: updatedCredential,
-        presentationReq,
-        attesterPubKey: attester.publicKey
-      });
-    });
+  const presentation = await claimer.buildPresentation({
+    credential,
+    presentationReq,
+    attesterPubKey: attester.publicKey
+  });
 
   // (4.3) The verifier checks the presentation for non-revocation, valid data and matching attester's public key.
+
   // We expect success because the credential is still valid in accPreRevo.
   const {
-    verified: verifiedRev0
+    verified: verifiedPreRevo
   } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
     attesterPubKey: attester.publicKey,
     latestAccumulator: accPreRevo
   });
+  console.log(
+    &quot;Cred verified w/ timestamp at revocation and old accumulator?\n\tExpected true, received&quot;,
+    verifiedPreRevo
+  );
+
   // We expect failure because the credential is invalid in accPostRevo.
   const {
-    verified: verifiedRev1
+    verified: verifiedPostRevo
   } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
@@ -342,16 +342,22 @@ async function exec() {
     latestAccumulator: accPostRevo
   });
   console.log(
-    &quot;Cred verified w/ timestamp at revocation and old accumulator? Expected true, received&quot;,
-    verifiedRev0
+    &quot;Cred verified w/ timestamp at revocation and new accumulator?\n\tExpected false, received&quot;,
+    verifiedPostRevo
   );
-  console.log(
-    &quot;Cred verified w/ timestamp at revocation and new accumulator? Expected false, received&quot;,
-    verifiedRev1
-  );
+
+  // Expect failure when updating a credential whose witness was revoked in any of the used accumulators.
+  await credential
+    .updateSingle({
+      attesterPubKey: attester.publicKey,
+      accumulator: accPostRevo
+    })
+    .catch(() =&gt; {
+      console.log(&quot;Could not update revoked credential as expected&quot;);
+    });
 }
 exec()
-  .catch(e =&gt; console.log(e))
+  .catch((e) =&gt; console.log(e))
   .finally(() =&gt; process.exit(1));
 </code></pre>
 

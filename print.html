@@ -84,8 +84,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="affix "><a href="0a_introduction.html">Introduction</a></li><li class=""><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class=""><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class=""><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class=""><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class=""><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="0a_introduction.html">Introduction</a></li><li class="chapter-item "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class="chapter-item "><a href="3_verification.html"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class="chapter-item "><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class="chapter-item "><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class="chapter-item "><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -203,13 +203,14 @@ Portablegabi is therefore experimental and provides no security guarantees.</p>
 <p>This tutorial will show you how to use the portablegabi library.
 It will take you approx. 30 minutes to work through.
 Before you dive in and try out the tutorial, you need to set up your environment.</p>
-<p>To get started you need to have the following dependencies installed:</p>
+<p>To get started, you need to have the following dependencies installed:</p>
 <ul>
 <li><a href="https://nodejs.org/en/">node</a> (any version starting with 10.19)</li>
 <li><a href="https://yarnpkg.com/getting-started">yarn</a></li>
 </ul>
 <h2><a class="header" href="#set-up-a-tutorial-project" id="set-up-a-tutorial-project">Set up a tutorial project</a></h2>
-<p>If you want to try out the examples inside this tutorial, create a new project and add Portablegabi as a dependency (either by using <code>yarn add</code> or <code>yarn link</code>)</p>
+<p>If you want to try out the examples inside this tutorial, create a new project and add Portablegabi as a dependency by using <code>yarn add</code>.
+If you have built and customized the <a href="https://github.com/KILTprotocol/portablegabi/">Portablegabi repo</a> on your own, just link it with <code>yarn link</code>.</p>
 <pre><code class="language-bash">mkdir portablegabi-rocks
 cd portablegabi-rocks
 yarn init -y
@@ -217,8 +218,20 @@ yarn add @kiltprotocol/portablegabi
 # or if you have build and linked Portablegabi by yourself:
 yarn link @kiltprotocol/portablegabi
 </code></pre>
+<p>Create an JavaScript file</p>
+<pre><code class="language-bash">touch index.js
+</code></pre>
+<p>and after adding some code from the examples, execute them with node</p>
+<pre><code class="language-bash">node index.js
+</code></pre>
 <h2><a class="header" href="#run-the-examples" id="run-the-examples">Run the examples</a></h2>
-<p>Since most of the Portablegabi functions are asynchronous (due to calling the WASM in a callback-fashion), you need to wrap the examples inside an asynchronous function which you call in the end. Note: If you run the examples in Typescript and have version <a href="https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/">3.8+</a> installed, you won't be required to do this due to the added top-level <code>await</code>.</p>
+<p>Most of the Portablegabi functions are asynchronous (due to calling the WASM in a callback-fashion).
+Therefore, you need to wrap the examples inside an asynchronous function which you call in the end.
+Moreover, when sending data from JavaScript to WASM and vise versa, it needs to be serialized to a string.
+Since the zero knowledge magic happens in the WASM, we rarely deserialize the received data in JavaScript.
+In case you are curious, you can deeper inspect the data more by calling <code>JSON.parse(&lt;data&gt;.valueOf())</code>.
+The <code>valueOf()</code> is necessary before unmarshalling because even though the data is basically a String, we created unique classes for them which extend <code>String</code>.</p>
+<p>Note: If you run the examples in Typescript and have version <a href="https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/">3.8+</a> installed, you won't be required to do this due to the added top-level <code>await</code>.</p>
 <pre><code class="language-js">async function exec() {
   // Portable gabi example functions...
 }
@@ -227,7 +240,9 @@ exec();
 <p>The creation of attester keys can take 10 to 30 minutes in javascript.
 Therefore, we recommend using the following example keys which to speed up the process.
 Please note that you should never use these keys in production.</p>
-<pre><code class="language-js">const privKey = new portablegabi.AttesterPrivateKey(
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+
+const privKey = new portablegabi.AttesterPrivateKey(
   '{&quot;XMLName&quot;:{&quot;Space&quot;:&quot;&quot;,&quot;Local&quot;:&quot;&quot;},&quot;Counter&quot;:0,&quot;ExpiryDate&quot;:1610554062,&quot;P&quot;:&quot;iDYKxuFGt1Xv1aqMLaagjrOPX0hjkOlFrKOp4NPnSBHmQ9SFETUX1M43q3jLsGz+UEWFS3+SS9QpP4CTkl3p/w==&quot;,&quot;Q&quot;:&quot;92MJOhwjESn7QohCCY1oBxsToAfccGoKtE3sBoaNxHWoowSiCy8fMG+B1sO5QU+bV3i1xwvVno9o30RcMoXEaw==&quot;,&quot;PPrime&quot;:&quot;RBsFY3CjW6r36tVGFtNQR1nHr6QxyHSi1lHU8GnzpAjzIepCiJqL6mcb1bxl2DZ/KCLCpb/JJeoUn8BJyS70/w==&quot;,&quot;QPrime&quot;:&quot;e7GEnQ4RiJT9oUQhBMa0A42J0APuODUFWib2A0NG4jrUUYJRBZePmDfA62HcoKfNq7xa44Xqz0e0b6IuGULiNQ==&quot;,&quot;ECDSA&quot;:&quot;MHcCAQEEILO+g4uSDheZ6PSLxR7olFzUhZpeO9tQu84hX6UeIevaoAoGCCqGSM49AwEHoUQDQgAEKvmUz3HIZy890jE78CC9V9BuN8taO+L8GjAeS14v0CL7GCFZ1GMnaSZi4WG3mOjJlJ80CnMowIbUT3Fw1TluFw==&quot;,&quot;NonrevSk&quot;:null}'
 );
 const pubKey = new portablegabi.AttesterPublicKey(
@@ -251,18 +266,24 @@ Then, the claimer can build their credential using the claim and the attester's 
     note right of C: The claimer builds their credential using the signature.
 </pre>
 <p>Before an attester can create attestations, they have to generate a key pair and publish their public key.</p>
-<pre><code class="language-ts">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 // Build a new attester.
 // Note: generating a new key pair will take around 10-30 minutes.
 // const attester = await portablegabi.Attester.create(365, 70)
 
 // For this example you could use the provided keys.
 // Note: never use those keys in production!!!
+const pubKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
+);
+const privKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated private key of the attester&gt;&quot;
+);
 const attester = new portablegabi.Attester(pubKey, privKey);
 
 // Create a new accumulator (which is used for revocation).
 let accumulator = await attester.createAccumulator();
-console.log(&quot;Accumulator: &quot;, accumulator.valueOf());
+console.log(&quot;Accumulator:\n\t&quot;, accumulator.valueOf());
 
 // Build a new claimer and generate a new master key.
 // const claimer = await portablegabi.Claimer.create()
@@ -270,9 +291,8 @@ console.log(&quot;Accumulator: &quot;, accumulator.valueOf());
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
   &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
 );
-</code></pre>
-<p>After the attester and claimer have both generated their keys, the attestation session can be initiated by the attester.</p>
-<pre><code class="language-js">// The attester initiates the attestation session.
+
+// The attester initiates the attestation session.
 const {
   message: startAttestationMsg,
   session: attestationSession
@@ -298,6 +318,7 @@ const {
 
 // The attester should check the claim they are about to attest.
 const receivedClaim = attestationRequest.getClaim();
+console.log(&quot;Claim built from attestation\n\t&quot;, receivedClaim);
 
 // Do checks on receivedClaim.
 // If everything checks out the attester issues an attestation.
@@ -312,14 +333,14 @@ const {
   // The update is used to generate a non-revocation witness.
   accumulator
 });
-console.log(&quot;Witness: &quot;, witness.valueOf());
+console.log(&quot;Witness:\n\t&quot;, witness.valueOf());
 
 // After the claimer has received their attestation, they can build their credential.
 const credential = await claimer.buildCredential({
   claimerSession,
   attestation
 });
-console.log(&quot;Credential: &quot;, credential.valueOf());
+console.log(&quot;Credential:\n\t&quot;, credential.valueOf());
 </code></pre>
 <p>Upon completion of an attestation session, the attester receives a <em>witness</em> which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.
 Note that an attester should store each witness and keep track of the matching claim.</p>
@@ -349,7 +370,7 @@ If the claimer sends a newer accumulator than <code>latestAccumulator</code>, th
 <p>In short: <strong>the verifier accepts an accumulator if it is newer than the newest accumulator they know of</strong> or <strong>if it was created after <code>reqUpdatedAfter</code></strong>.</p>
 <p>For more details about the accumulator, have a look at the next <a href="./4_revocation.html">section</a>.</p>
 <h2><a class="header" href="#example" id="example">Example</a></h2>
-<pre><code class="language-ts">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
   &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
@@ -362,7 +383,7 @@ const accumulator = new portablegabi.Accumulator(
   &quot;&lt;The accumulator created during the attestation&gt;&quot;
 );
 const pubKey = new portablegabi.AttesterPublicKey(
-  &quot;&lt;Public key of the attester&gt;&quot;
+  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
 );
 
 // The verifier request a presentation.
@@ -386,11 +407,12 @@ const presentation = await claimer.buildPresentation({
   presentationReq,
   attesterPubKey: pubKey
 });
+console.log(&quot;Presentation:\n\t&quot;, presentation.valueOf());
 
 // The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {
   // The contained claim, this value is undefined if the proof could not be validated.
-  claim,
+  claim: publicClaim,
   // A boolean which indicates whether the presentation was valid.
   verified
 } = await portablegabi.Verifier.verifyPresentation({
@@ -402,8 +424,8 @@ const {
   // This accumulator is used to check whether the claimer provided the newest available accumulator.
   latestAccumulator: accumulator
 });
-console.log(&quot;Claim: &quot;, claim);
-console.log(&quot;Verified? &quot;, verified);
+console.log(&quot;Public claim:\n\t&quot;, publicClaim);
+console.log(&quot;Verified?&quot;, verified);
 </code></pre>
 <h1><a class="header" href="#revocation-1" id="revocation-1">Revocation</a></h1>
 <p>An attester can revoke any credential they attested.
@@ -417,20 +439,32 @@ Further documentation on how this accumulator works can be found in the <a href=
 <p>In order to revoke a credential, the attester needs their key pair, the witness of credential they want to revoke (created in <code>issueAttestation</code>) and the accumulator.</p>
 <pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
+const pubKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
+);
+const privKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated private key of the attester&gt;&quot;
+);
 const attester = new portablegabi.Attester(pubKey, privKey);
-const accPreRevo = await attester.createAccumulator();
+const accPreRevo = new portablegabi.Accumulator(
+  &quot;&lt;The accumulator created during the attestation&gt;&quot;
+);
+const witnessToBeRevoked = new portablegabi.Witness(
+  &quot;&lt;The witness created during the attestation&gt;&quot;
+);
 
 // Issue attestations and store witnesses.
 const accPostRevo = await attester.revokeAttestation({
   accumulator: accPreRevo,
   // The list of witnesses associated with the credentials which should get revoked.
-  witnesses: [witness0, witness2, witness3]
+  witnesses: [witnessToBeRevoked]
 });
-// Publish accPostRevo.
+console.log(&quot;Accumulator after revocation:\n\t&quot;, accPostRevo.valueOf());
+// Publish the accumulator after revocation.
 </code></pre>
 <p>After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to their newest available accumulator.
 In order to update the credential, <strong>the claimer needs the complete history of all new accumulators since their last update</strong>.</p>
-<pre><code class="language-ts">const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
+<pre><code class="language-js">const claimer = await portablegabi.Claimer.buildFromMnemonic('siege decrease quantum control snap ride position strategy fire point airport include')
 let credential = () =&gt; {
     // Request an attestation from an attester.
     // Build a credential.
@@ -440,6 +474,7 @@ let credential = () =&gt; {
 
 // How to update your credential?
 // The Credential is updated to accumulator 55, the newest accumulator has index 59.
+// Note that a user does not have to input the accumulators in a sorted way - Portablegabi takes care of this.
 const newCredential = await credential.update({
     attesterPubKey: attestersPublicKey,
     accumulators: [accumulator56, accumulator57, accumulator58, accumulator59],
@@ -465,7 +500,7 @@ cargo build
 <p>You might want to grab a cup of tee! 🍵
 Building the chain might take up to 30 min.</p>
 <h3><a class="header" href="#start-the-chain" id="start-the-chain">Start the chain</a></h3>
-<pre><code class="language-bash">./target/release/node-portablegabi --dev
+<pre><code class="language-bash">cargo run -- --dev
 </code></pre>
 <h1><a class="header" href="#run-examples" id="run-examples">Run examples</a></h1>
 <p>The purpose of the chain is to both store each attester's accumulator and give access to old revisions, as these are required when updating older credentials.
@@ -478,10 +513,14 @@ Therefore, we have added some chain functionality to both the credential and att
 <li>Revoke the attested claim from 2. and (automatically) update the accumulator.</li>
 <li>Check out multiple verifications with different timestamps.</li>
 </ol>
-<pre><code class="language-javascript">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
-const privKey = new portablegabi.AttesterPrivateKey(&quot;...&quot;);
-const pubKey = new portablegabi.AttesterPublicKey(&quot;...&quot;);
+const pubKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
+);
+const privKey = new portablegabi.AttesterPrivateKey(
+  &quot;&lt;The pre-generated private key of the attester&gt;&quot;
+);
 
 async function exec() {
   /** (1) Chain phase */
@@ -489,7 +528,7 @@ async function exec() {
   const chain = await portablegabi.connect({
     pgabiModName: &quot;portablegabiPallet&quot;
   });
-  console.log(&quot;Connected to chain&quot;);
+  console.log(&quot;Successfully connected to the chain&quot;);
 
   // (1.2) Create Alice identity.
   const attester = await portablegabi.AttesterChain.buildFromURI(
@@ -502,11 +541,13 @@ async function exec() {
   const accPreRevo = await attester.createAccumulator();
 
   // (1.4) Put the accumulator on chain.
+  console.log(&quot;Putting accumulator on the chain for Alice&quot;);
   await attester.updateAccumulator(accPreRevo);
 
   // Check whether it has actually been added to chain.
   // We need to wait for next block since updating the accumulator is a transaction.
   await chain.waitForNextBlock();
+  console.log(&quot;\t Waiting for next block to have the accumulator on the chain&quot;);
   console.log(
     &quot;Latest accumulator === accPreRevo? Expected true, received&quot;,
     (await chain.getLatestAccumulator(attester.address)).valueOf() ===
@@ -572,17 +613,20 @@ async function exec() {
   // Check whether accPostRevo is the latest accumulator on chain.
   await chain.waitForNextBlock();
   console.log(
+    &quot;\t Waiting for next block to have the updated accumulator on the chain&quot;
+  );
+  console.log(
     &quot;Latest accumulator === accPostRevo? Expected true, received&quot;,
     (await chain.getLatestAccumulator(attester.address)).valueOf() ===
       accPostRevo.valueOf()
   );
 
   /** (4) Verification phase */
-  // Get the exact timestamp of the revocation for simplicity.
+  // Get the exact timestamp of the revocation for simplicity, also works for dates after accumulator date.
   const timeAtRev = await accPostRevo.getDate(attester.publicKey);
 
   // (4.1) The verifier sends a nonce and context to the claimer and requests disclosed attributes.
-  // Note: the requested timestamp at revocation
+  // Note: The requested timestamp equals the accumulator date.
   const {
     session: verifierSession,
     message: presentationReq
@@ -593,40 +637,31 @@ async function exec() {
 
   // (4.2) The claimer builds a presentation with the revoked credential.
   // Note: They need to update as the credential was build before timeAtRev.
-  const presentation = await claimer
-    .buildPresentation({
-      credential,
-      presentationReq,
-      attesterPubKey: attester.publicKey
-    })
-    .catch(() =&gt; {
-      console.log(
-        &quot;Caught expected error when building presentation due to credential not matching the required timestamp&quot;
-      );
-      const updatedCredential = credential.updateFromChain({
-        attesterPubKey: attester.publicKey,
-        attesterChainAddress: attester.address
-      });
-      return claimer.buildPresentation({
-        credential: updatedCredential,
-        presentationReq,
-        attesterPubKey: attester.publicKey
-      });
-    });
+  const presentation = await claimer.buildPresentation({
+    credential,
+    presentationReq,
+    attesterPubKey: attester.publicKey
+  });
 
   // (4.3) The verifier checks the presentation for non-revocation, valid data and matching attester's public key.
+
   // We expect success because the credential is still valid in accPreRevo.
   const {
-    verified: verifiedRev0
+    verified: verifiedPreRevo
   } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
     attesterPubKey: attester.publicKey,
     latestAccumulator: accPreRevo
   });
+  console.log(
+    &quot;Cred verified w/ timestamp at revocation and old accumulator?\n\tExpected true, received&quot;,
+    verifiedPreRevo
+  );
+
   // We expect failure because the credential is invalid in accPostRevo.
   const {
-    verified: verifiedRev1
+    verified: verifiedPostRevo
   } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
@@ -634,16 +669,22 @@ async function exec() {
     latestAccumulator: accPostRevo
   });
   console.log(
-    &quot;Cred verified w/ timestamp at revocation and old accumulator? Expected true, received&quot;,
-    verifiedRev0
+    &quot;Cred verified w/ timestamp at revocation and new accumulator?\n\tExpected false, received&quot;,
+    verifiedPostRevo
   );
-  console.log(
-    &quot;Cred verified w/ timestamp at revocation and new accumulator? Expected false, received&quot;,
-    verifiedRev1
-  );
+
+  // Expect failure when updating a credential whose witness was revoked in any of the used accumulators.
+  await credential
+    .updateSingle({
+      attesterPubKey: attester.publicKey,
+      accumulator: accPostRevo
+    })
+    .catch(() =&gt; {
+      console.log(&quot;Could not update revoked credential as expected&quot;);
+    });
 }
 exec()
-  .catch(e =&gt; console.log(e))
+  .catch((e) =&gt; console.log(e))
   .finally(() =&gt; process.exit(1));
 </code></pre>
 <h1><a class="header" href="#development" id="development">Development</a></h1>

@@ -82,8 +82,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="affix "><a href="0a_introduction.html">Introduction</a></li><li class="expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class="expanded "><a href="3_verification.html" class="active"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class=""><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class=""><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class=""><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="0a_introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="1_getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="2_attestation.html"><strong aria-hidden="true">1.1.</strong> Attestation</a></li><li class="chapter-item expanded "><a href="3_verification.html" class="active"><strong aria-hidden="true">1.2.</strong> Verification</a></li><li class="chapter-item "><a href="4_revocation.html"><strong aria-hidden="true">1.3.</strong> Revocation</a></li><li class="chapter-item "><a href="5_with_chain.html"><strong aria-hidden="true">1.4.</strong> Blockchain</a></li></ol></li><li class="chapter-item "><a href="6_development.html"><strong aria-hidden="true">2.</strong> Development</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -179,7 +179,7 @@ If the claimer sends a newer accumulator than <code>latestAccumulator</code>, th
 <p>In short: <strong>the verifier accepts an accumulator if it is newer than the newest accumulator they know of</strong> or <strong>if it was created after <code>reqUpdatedAfter</code></strong>.</p>
 <p>For more details about the accumulator, have a look at the next <a href="./4_revocation.html">section</a>.</p>
 <h2><a class="header" href="#example" id="example">Example</a></h2>
-<pre><code class="language-ts">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
+<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
 
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
   &quot;siege decrease quantum control snap ride position strategy fire point airport include&quot;
@@ -192,7 +192,7 @@ const accumulator = new portablegabi.Accumulator(
   &quot;&lt;The accumulator created during the attestation&gt;&quot;
 );
 const pubKey = new portablegabi.AttesterPublicKey(
-  &quot;&lt;Public key of the attester&gt;&quot;
+  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
 );
 
 // The verifier request a presentation.
@@ -216,11 +216,12 @@ const presentation = await claimer.buildPresentation({
   presentationReq,
   attesterPubKey: pubKey
 });
+console.log(&quot;Presentation:\n\t&quot;, presentation.valueOf());
 
 // The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {
   // The contained claim, this value is undefined if the proof could not be validated.
-  claim,
+  claim: publicClaim,
   // A boolean which indicates whether the presentation was valid.
   verified
 } = await portablegabi.Verifier.verifyPresentation({
@@ -232,8 +233,8 @@ const {
   // This accumulator is used to check whether the claimer provided the newest available accumulator.
   latestAccumulator: accumulator
 });
-console.log(&quot;Claim: &quot;, claim);
-console.log(&quot;Verified? &quot;, verified);
+console.log(&quot;Public claim:\n\t&quot;, publicClaim);
+console.log(&quot;Verified?&quot;, verified);
 </code></pre>
 
                     </main>
