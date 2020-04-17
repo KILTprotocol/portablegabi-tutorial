@@ -20,7 +20,7 @@ sequenceDiagram
 
 Before an attester can create attestations, they have to generate a key pair and publish their public key.
 
-```ts
+```js
 const portablegabi = require("@kiltprotocol/portablegabi");
 // Build a new attester.
 // Note: generating a new key pair will take around 10-30 minutes.
@@ -28,11 +28,17 @@ const portablegabi = require("@kiltprotocol/portablegabi");
 
 // For this example you could use the provided keys.
 // Note: never use those keys in production!!!
+const pubKey = new portablegabi.AttesterPrivateKey(
+  "<The pre-generated public key of the attester>"
+);
+const privKey = new portablegabi.AttesterPrivateKey(
+  "<The pre-generated private key of the attester>"
+);
 const attester = new portablegabi.Attester(pubKey, privKey);
 
 // Create a new accumulator (which is used for revocation).
 let accumulator = await attester.createAccumulator();
-console.log("Accumulator: ", accumulator.valueOf());
+console.log("Accumulator:\n\t", accumulator.valueOf());
 
 // Build a new claimer and generate a new master key.
 // const claimer = await portablegabi.Claimer.create()
@@ -40,11 +46,7 @@ console.log("Accumulator: ", accumulator.valueOf());
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
   "siege decrease quantum control snap ride position strategy fire point airport include"
 );
-```
 
-After the attester and claimer have both generated their keys, the attestation session can be initiated by the attester.
-
-```js
 // The attester initiates the attestation session.
 const {
   message: startAttestationMsg,
@@ -71,6 +73,7 @@ const {
 
 // The attester should check the claim they are about to attest.
 const receivedClaim = attestationRequest.getClaim();
+console.log("Claim built from attestation\n\t", receivedClaim);
 
 // Do checks on receivedClaim.
 // If everything checks out the attester issues an attestation.
@@ -85,14 +88,14 @@ const {
   // The update is used to generate a non-revocation witness.
   accumulator
 });
-console.log("Witness: ", witness.valueOf());
+console.log("Witness:\n\t", witness.valueOf());
 
 // After the claimer has received their attestation, they can build their credential.
 const credential = await claimer.buildCredential({
   claimerSession,
   attestation
 });
-console.log("Credential: ", credential.valueOf());
+console.log("Credential:\n\t", credential.valueOf());
 ```
 
 Upon completion of an attestation session, the attester receives a _witness_ which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.

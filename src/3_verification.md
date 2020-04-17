@@ -35,7 +35,7 @@ For more details about the accumulator, have a look at the next [section](./4_re
 
 ## Example
 
-```ts
+```js
 const portablegabi = require("@kiltprotocol/portablegabi");
 
 const claimer = await portablegabi.Claimer.buildFromMnemonic(
@@ -49,7 +49,7 @@ const accumulator = new portablegabi.Accumulator(
   "<The accumulator created during the attestation>"
 );
 const pubKey = new portablegabi.AttesterPublicKey(
-  "<Public key of the attester>"
+  "<The pre-generated public key of the attester>"
 );
 
 // The verifier request a presentation.
@@ -73,11 +73,12 @@ const presentation = await claimer.buildPresentation({
   presentationReq,
   attesterPubKey: pubKey
 });
+console.log("Presentation:\n\t", presentation.valueOf());
 
 // The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {
   // The contained claim, this value is undefined if the proof could not be validated.
-  claim,
+  claim: publicClaim,
   // A boolean which indicates whether the presentation was valid.
   verified
 } = await portablegabi.Verifier.verifyPresentation({
@@ -89,6 +90,6 @@ const {
   // This accumulator is used to check whether the claimer provided the newest available accumulator.
   latestAccumulator: accumulator
 });
-console.log("Claim: ", claim);
-console.log("Verified? ", verified);
+console.log("Public claim:\n\t", publicClaim);
+console.log("Verified?", verified);
 ```

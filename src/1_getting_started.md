@@ -4,14 +4,15 @@ This tutorial will show you how to use the portablegabi library.
 It will take you approx. 30 minutes to work through.
 Before you dive in and try out the tutorial, you need to set up your environment.
 
-To get started you need to have the following dependencies installed:
+To get started, you need to have the following dependencies installed:
 
 - [node](https://nodejs.org/en/) (any version starting with 10.19)
 - [yarn](https://yarnpkg.com/getting-started)
 
 ## Set up a tutorial project
 
-If you want to try out the examples inside this tutorial, create a new project and add Portablegabi as a dependency (either by using `yarn add` or `yarn link`)
+If you want to try out the examples inside this tutorial, create a new project and add Portablegabi as a dependency by using `yarn add`.
+If you have built and customized the [Portablegabi repo](https://github.com/KILTprotocol/portablegabi/) on your own, just link it with `yarn link`.
 
 ```bash
 mkdir portablegabi-rocks
@@ -22,9 +23,28 @@ yarn add @kiltprotocol/portablegabi
 yarn link @kiltprotocol/portablegabi
 ```
 
+Create an JavaScript file
+
+```bash
+touch index.js
+```
+
+and after adding some code from the examples, execute them with node
+
+```bash
+node index.js
+```
+
 ## Run the examples
 
-Since most of the Portablegabi functions are asynchronous (due to calling the WASM in a callback-fashion), you need to wrap the examples inside an asynchronous function which you call in the end. Note: If you run the examples in Typescript and have version [3.8+](https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/) installed, you won't be required to do this due to the added top-level `await`.
+Most of the Portablegabi functions are asynchronous (due to calling the WASM in a callback-fashion).
+Therefore, you need to wrap the examples inside an asynchronous function which you call in the end.
+Moreover, when sending data from JavaScript to WASM and vise versa, it needs to be serialized to a string.
+Since the zero knowledge magic happens in the WASM, we rarely deserialize the received data in JavaScript.
+In case you are curious, you can deeper inspect the data more by calling `JSON.parse(<data>.valueOf())`.
+The `valueOf()` is necessary before unmarshalling because even though the data is basically a String, we created unique classes for them which extend `String`.
+
+Note: If you run the examples in Typescript and have version [3.8+](https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/) installed, you won't be required to do this due to the added top-level `await`.
 
 ```js
 async function exec() {
@@ -38,6 +58,8 @@ Therefore, we recommend using the following example keys which to speed up the p
 Please note that you should never use these keys in production.
 
 ```js
+const portablegabi = require("@kiltprotocol/portablegabi");
+
 const privKey = new portablegabi.AttesterPrivateKey(
   '{"XMLName":{"Space":"","Local":""},"Counter":0,"ExpiryDate":1610554062,"P":"iDYKxuFGt1Xv1aqMLaagjrOPX0hjkOlFrKOp4NPnSBHmQ9SFETUX1M43q3jLsGz+UEWFS3+SS9QpP4CTkl3p/w==","Q":"92MJOhwjESn7QohCCY1oBxsToAfccGoKtE3sBoaNxHWoowSiCy8fMG+B1sO5QU+bV3i1xwvVno9o30RcMoXEaw==","PPrime":"RBsFY3CjW6r36tVGFtNQR1nHr6QxyHSi1lHU8GnzpAjzIepCiJqL6mcb1bxl2DZ/KCLCpb/JJeoUn8BJyS70/w==","QPrime":"e7GEnQ4RiJT9oUQhBMa0A42J0APuODUFWib2A0NG4jrUUYJRBZePmDfA62HcoKfNq7xa44Xqz0e0b6IuGULiNQ==","ECDSA":"MHcCAQEEILO+g4uSDheZ6PSLxR7olFzUhZpeO9tQu84hX6UeIevaoAoGCCqGSM49AwEHoUQDQgAEKvmUz3HIZy890jE78CC9V9BuN8taO+L8GjAeS14v0CL7GCFZ1GMnaSZi4WG3mOjJlJ80CnMowIbUT3Fw1TluFw==","NonrevSk":null}'
 );
