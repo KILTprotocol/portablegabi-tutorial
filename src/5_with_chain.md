@@ -27,7 +27,7 @@ Building the chain might take up to 30 min.
 ### Start the chain
 
 ```bash
-./target/debug/node-portablegabi --dev
+cargo run -- --dev
 ```
 
 # Run examples
