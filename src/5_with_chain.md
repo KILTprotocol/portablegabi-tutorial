@@ -77,8 +77,6 @@ async function exec() {
   await attester.updateAccumulator(accPreRevo);
 
   // Check whether it has actually been added to chain.
-  // We need to wait for next block since updating the accumulator is a transaction.
-  await chain.waitForNextBlock();
   console.log("\t Waiting for next block to have the accumulator on the chain");
   console.log(
     "Latest accumulator === accPreRevo? Expected true, received",
@@ -143,10 +141,6 @@ async function exec() {
     accumulator: accPreRevo
   });
   // Check whether accPostRevo is the latest accumulator on chain.
-  await chain.waitForNextBlock();
-  console.log(
-    "\t Waiting for next block to have the updated accumulator on the chain"
-  );
   console.log(
     "Latest accumulator === accPostRevo? Expected true, received",
     (await chain.getLatestAccumulator(attester.address)).valueOf() ===
