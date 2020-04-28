@@ -33,9 +33,9 @@ const witnessToBeRevoked = new portablegabi.Witness(
 const accPostRevo = await attester.revokeAttestation({
   accumulator: accPreRevo,
   // The list of witnesses associated with the credentials which should get revoked.
-  witnesses: [witnessToBeRevoked]
+  witnesses: [witnessToBeRevoked],
 });
-console.log("Accumulator after revocation:\n\t", accPostRevo.valueOf());
+console.log("Accumulator after revocation:\n\t", accPostRevo.toString()());
 // Publish the accumulator after revocation.
 ```
 

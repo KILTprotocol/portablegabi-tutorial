@@ -41,8 +41,8 @@ Most of the Portablegabi functions are asynchronous (due to calling the WASM in 
 Therefore, you need to wrap the examples inside an asynchronous function which you call in the end.
 Moreover, when sending data from JavaScript to WASM and vise versa, it needs to be serialized to a string.
 Since the zero knowledge magic happens in the WASM, we rarely deserialize the received data in JavaScript.
-In case you are curious, you can deeper inspect the data more by calling `JSON.parse(<data>.valueOf())`.
-The `valueOf()` is necessary before unmarshalling because even though the data is basically a String, we created unique classes for them which extend `String`.
+In case you are curious, you can deeper inspect the data more by calling `<data>.parse()`.
+We wrap all data received from WASM into a custom class `WasmData` that only supports unmarshalling via `JSON.parse(<data>)` by calling `.parse()` and displaying the data as string via `.toString()`
 
 Note: If you run the examples in Typescript and have version [3.8+](https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/) installed, you won't be required to do this due to the added top-level `await`.
 
