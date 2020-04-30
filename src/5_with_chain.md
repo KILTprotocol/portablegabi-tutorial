@@ -18,6 +18,7 @@ In order to use that, just clone and set up the [`portablegabi-node`](https://gi
 git clone https://github.com/KILTprotocol/portablegabi-node.git
 cd portablegabi-node
 ./scripts/init.sh
+./scripts/build.sh
 cargo build
 ```
 
@@ -35,6 +36,14 @@ cargo run -- --dev
 The purpose of the chain is to both store each attester's accumulator and give access to old revisions, as these are required when updating older credentials.
 Therefore, we have added some chain functionality to both the credential and attester classes.
 
+## AttesterChain
+
+We extended the attester identity in a sub-class named `AttesterChain`.
+This class extends `Attester` by adding on-chain functionality to the identity's creation, handling of the accumulator and revocation.
+In terms of the creation, you have the choice between an [`ed25519` and a `sr25519` account key](https://wiki.polkadot.network/docs/en/learn-keys) for the chain.
+Moreover, you can build it from a [URI](https://polkadot.js.org/ui/start/keyring.derivation.html) like `//Alice`.
+When revoking a credential, the accumulator on the chain gets updated automatically.
+
 ## Example 1: Complete process for single credential with revocation
 
 In the following, we will run a complete exemplary chain process:
@@ -47,7 +56,7 @@ In the following, we will run a complete exemplary chain process:
 ```js
 const portablegabi = require("@kiltprotocol/portablegabi");
 
-const pubKey = new portablegabi.AttesterPrivateKey(
+const pubKey = new portablegabi.AttesterPublicKey(
   "<The pre-generated public key of the attester>"
 );
 const privKey = new portablegabi.AttesterPrivateKey(
@@ -58,7 +67,7 @@ async function exec() {
   /** (1) Chain phase */
   // (1.1) Connect to the chain.
   const chain = await portablegabi.connect({
-    pgabiModName: "portablegabiPallet"
+    pgabiModName: "portablegabiPallet",
   });
   console.log("Successfully connected to the chain");
 
@@ -66,7 +75,8 @@ async function exec() {
   const attester = await portablegabi.AttesterChain.buildFromURI(
     pubKey,
     privKey,
-    "//Alice"
+    "//Alice",
+    "ed25519"
   );
 
   // (1.3) Create a fresh accumulator.
@@ -88,7 +98,7 @@ async function exec() {
   // (2.1) The attester initiates the attestation session.
   const {
     message: startAttestationMsg,
-    session: attestationSession
+    session: attestationSession,
   } = await attester.startAttestation();
 
   // (2.2) The claimer answers with an attestation request.
@@ -101,19 +111,19 @@ async function exec() {
     drivers_license: {
       id: "127128204193",
       category: "B2",
-      licensing_authority: "Berlin A52452"
-    }
+      licensing_authority: "Berlin A52452",
+    },
   };
   const {
     message: attestationRequest,
-    session: claimerSession
+    session: claimerSession,
   } = await claimer.requestAttestation({
     // the received attestation message
     startAttestationMsg,
     // the claim which should get attested
     claim,
     // the public key of the attester
-    attesterPubKey: attester.publicKey
+    attesterPubKey: attester.publicKey,
   });
 
   // (2.3) The attester issues an attestation.
@@ -121,16 +131,16 @@ async function exec() {
     // The attestation should be sent over to the claimer.
     attestation,
     // The witness should be stored for later revocation.
-    witness
+    witness,
   } = await attester.issueAttestation({
     attestationSession,
     attestationRequest,
     // The update is used to generate a non-revocation witness.
-    accumulator: accPreRevo
+    accumulator: accPreRevo,
   });
   const credential = await claimer.buildCredential({
     claimerSession,
-    attestation
+    attestation,
   });
 
   /** (3) Revocation phase */
@@ -138,7 +148,7 @@ async function exec() {
   // Revoke the attestation and receive a new accumulator whitelist.
   const accPostRevo = await attester.revokeAttestation({
     witnesses: [witness],
-    accumulator: accPreRevo
+    accumulator: accPreRevo,
   });
   // Check whether accPostRevo is the latest accumulator on chain.
   console.log(
@@ -155,10 +165,10 @@ async function exec() {
   // Note: The requested timestamp equals the accumulator date.
   const {
     session: verifierSession,
-    message: presentationReq
+    message: presentationReq,
   } = await portablegabi.Verifier.requestPresentation({
     requestedAttributes: ["age", "drivers_license.category"],
-    reqUpdatedAfter: timeAtRev
+    reqUpdatedAfter: timeAtRev,
   });
 
   // (4.2) The claimer builds a presentation with the revoked credential.
@@ -166,19 +176,19 @@ async function exec() {
   const presentation = await claimer.buildPresentation({
     credential,
     presentationReq,
-    attesterPubKey: attester.publicKey
+    attesterPubKey: attester.publicKey,
   });
 
   // (4.3) The verifier checks the presentation for non-revocation, valid data and matching attester's public key.
 
   // We expect success because the credential is still valid in accPreRevo.
   const {
-    verified: verifiedPreRevo
+    verified: verifiedPreRevo,
   } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
     attesterPubKey: attester.publicKey,
-    latestAccumulator: accPreRevo
+    latestAccumulator: accPreRevo,
   });
   console.log(
     "Cred verified w/ timestamp at revocation and old accumulator?\n\tExpected true, received",
@@ -187,12 +197,12 @@ async function exec() {
 
   // We expect failure because the credential is invalid in accPostRevo.
   const {
-    verified: verifiedPostRevo
+    verified: verifiedPostRevo,
   } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
     attesterPubKey: attester.publicKey,
-    latestAccumulator: accPostRevo
+    latestAccumulator: accPostRevo,
   });
   console.log(
     "Cred verified w/ timestamp at revocation and new accumulator?\n\tExpected false, received",
@@ -203,7 +213,7 @@ async function exec() {
   await credential
     .updateSingle({
       attesterPubKey: attester.publicKey,
-      accumulator: accPostRevo
+      accumulator: accPostRevo,
     })
     .catch(() => {
       console.log("Could not update revoked credential as expected");
