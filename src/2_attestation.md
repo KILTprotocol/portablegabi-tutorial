@@ -28,7 +28,7 @@ const portablegabi = require("@kiltprotocol/portablegabi");
 
 // For this example you could use the provided keys.
 // Note: never use those keys in production!!!
-const pubKey = new portablegabi.AttesterPrivateKey(
+const pubKey = new portablegabi.AttesterPublicKey(
   "<The pre-generated public key of the attester>"
 );
 const privKey = new portablegabi.AttesterPrivateKey(
