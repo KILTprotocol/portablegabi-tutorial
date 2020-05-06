@@ -67,7 +67,7 @@ async function exec() {
   /** (1) Chain phase */
   // (1.1) Connect to the chain.
   const chain = await portablegabi.connect({
-    pgabiModName: "portablegabiPallet",
+    pgabiModName: "portablegabi",
   });
   console.log("Successfully connected to the chain");
 
