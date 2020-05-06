@@ -206,7 +206,7 @@ async function exec() {
   /** (1) Chain phase */
   // (1.1) Connect to the chain.
   const chain = await portablegabi.connect({
-    pgabiModName: &quot;portablegabiPallet&quot;,
+    pgabiModName: &quot;portablegabi&quot;,
   });
   console.log(&quot;Successfully connected to the chain&quot;);
 
@@ -229,8 +229,8 @@ async function exec() {
   console.log(&quot;\t Waiting for next block to have the accumulator on the chain&quot;);
   console.log(
     &quot;Latest accumulator === accPreRevo? Expected true, received&quot;,
-    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
-      accPreRevo.valueOf()
+    (await chain.getLatestAccumulator(attester.address)).toString()() ===
+      accPreRevo.toString()()
   );
 
   /** (2) Attestation phase */
@@ -292,8 +292,8 @@ async function exec() {
   // Check whether accPostRevo is the latest accumulator on chain.
   console.log(
     &quot;Latest accumulator === accPostRevo? Expected true, received&quot;,
-    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
-      accPostRevo.valueOf()
+    (await chain.getLatestAccumulator(attester.address)).toString()() ===
+      accPostRevo.toString()()
   );
 
   /** (4) Verification phase */

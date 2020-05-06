@@ -183,9 +183,9 @@ const witnessToBeRevoked = new portablegabi.Witness(
 const accPostRevo = await attester.revokeAttestation({
   accumulator: accPreRevo,
   // The list of witnesses associated with the credentials which should get revoked.
-  witnesses: [witnessToBeRevoked]
+  witnesses: [witnessToBeRevoked],
 });
-console.log(&quot;Accumulator after revocation:\n\t&quot;, accPostRevo.valueOf());
+console.log(&quot;Accumulator after revocation:\n\t&quot;, accPostRevo.toString()());
 // Publish the accumulator after revocation.
 </code></pre>
 <p>After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to their newest available accumulator.

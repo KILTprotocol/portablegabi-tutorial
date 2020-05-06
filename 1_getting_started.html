@@ -183,8 +183,8 @@ yarn link @kiltprotocol/portablegabi
 Therefore, you need to wrap the examples inside an asynchronous function which you call in the end.
 Moreover, when sending data from JavaScript to WASM and vise versa, it needs to be serialized to a string.
 Since the zero knowledge magic happens in the WASM, we rarely deserialize the received data in JavaScript.
-In case you are curious, you can deeper inspect the data more by calling <code>JSON.parse(&lt;data&gt;.valueOf())</code>.
-The <code>valueOf()</code> is necessary before unmarshalling because even though the data is basically a String, we created unique classes for them which extend <code>String</code>.</p>
+In case you are curious, you can deeper inspect the data more by calling <code>&lt;data&gt;.parse()</code>.
+We wrap all data received from WASM into a custom class <code>WasmData</code> that only supports unmarshalling via <code>JSON.parse(&lt;data&gt;)</code> by calling <code>.parse()</code> and displaying the data as string via <code>.toString()</code></p>
 <p>Note: If you run the examples in Typescript and have version <a href="https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/">3.8+</a> installed, you won't be required to do this due to the added top-level <code>await</code>.</p>
 <pre><code class="language-js">async function exec() {
   // Portable gabi example functions...

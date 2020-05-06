@@ -155,7 +155,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#introduction-to-portablegabi-002" id="introduction-to-portablegabi-002">Introduction to Portablegabi 0.0.2</a></h1>
+                        <h1><a class="header" href="#introduction-to-portablegabi-a-hrefhttpswwwnpmjscompackagekiltprotocolportablegabiimg-srchttpsimgshieldsionpmvkiltprotocolportablegabi-altnpm-a" id="introduction-to-portablegabi-a-hrefhttpswwwnpmjscompackagekiltprotocolportablegabiimg-srchttpsimgshieldsionpmvkiltprotocolportablegabi-altnpm-a">Introduction to Portablegabi <a href="https://www.npmjs.com/package/@kiltprotocol/portablegabi"><img src="https://img.shields.io/npm/v/@kiltprotocol/portablegabi" alt="NPM" /></a></a></h1>
 <p>The Portablegabi library provides an <strong>easy to use API for signing JSON objects and for verifying and revoking these signatures</strong>.
 This library intends to enable the claimer, who possesses the signed JSON object, to prove to a third party, called verifier, that a specific property is present inside the JSON object and that a trusted attester signed the object.
 The important benefit of Portablegabi is that the <strong>claimer stays anonymous during the verification</strong>.
@@ -229,8 +229,8 @@ yarn link @kiltprotocol/portablegabi
 Therefore, you need to wrap the examples inside an asynchronous function which you call in the end.
 Moreover, when sending data from JavaScript to WASM and vise versa, it needs to be serialized to a string.
 Since the zero knowledge magic happens in the WASM, we rarely deserialize the received data in JavaScript.
-In case you are curious, you can deeper inspect the data more by calling <code>JSON.parse(&lt;data&gt;.valueOf())</code>.
-The <code>valueOf()</code> is necessary before unmarshalling because even though the data is basically a String, we created unique classes for them which extend <code>String</code>.</p>
+In case you are curious, you can deeper inspect the data more by calling <code>&lt;data&gt;.parse()</code>.
+We wrap all data received from WASM into a custom class <code>WasmData</code> that only supports unmarshalling via <code>JSON.parse(&lt;data&gt;)</code> by calling <code>.parse()</code> and displaying the data as string via <code>.toString()</code></p>
 <p>Note: If you run the examples in Typescript and have version <a href="https://devblogs.microsoft.com/typescript/announcing-typescript-3-8/">3.8+</a> installed, you won't be required to do this due to the added top-level <code>await</code>.</p>
 <pre><code class="language-js">async function exec() {
   // Portable gabi example functions...
@@ -283,7 +283,7 @@ const attester = new portablegabi.Attester(pubKey, privKey);
 
 // Create a new accumulator (which is used for revocation).
 let accumulator = await attester.createAccumulator();
-console.log(&quot;Accumulator:\n\t&quot;, accumulator.valueOf());
+console.log(&quot;Accumulator:\n\t&quot;, accumulator.toString()());
 
 // Build a new claimer and generate a new master key.
 // const claimer = await portablegabi.Claimer.create()
@@ -295,25 +295,25 @@ const claimer = await portablegabi.Claimer.buildFromMnemonic(
 // The attester initiates the attestation session.
 const {
   message: startAttestationMsg,
-  session: attestationSession
+  session: attestationSession,
 } = await attester.startAttestation();
 
 // The claimer answers with an attestation request.
 const claim = {
   age: 15,
-  name: &quot;George&quot;
+  name: &quot;George&quot;,
 };
 
 const {
   message: attestationRequest,
-  session: claimerSession
+  session: claimerSession,
 } = await claimer.requestAttestation({
   // The received attestation message.
   startAttestationMsg,
   // The claim which should get attested.
   claim,
   // The public key of the attester.
-  attesterPubKey: attester.publicKey
+  attesterPubKey: attester.publicKey,
 });
 
 // The attester should check the claim they are about to attest.
@@ -326,21 +326,21 @@ const {
   // The attestation should be sent over to the claimer.
   attestation,
   // The witness should be stored for later revocation.
-  witness
+  witness,
 } = await attester.issueAttestation({
   attestationSession,
   attestationRequest,
   // The update is used to generate a non-revocation witness.
-  accumulator
+  accumulator,
 });
-console.log(&quot;Witness:\n\t&quot;, witness.valueOf());
+console.log(&quot;Witness:\n\t&quot;, witness.toString()());
 
 // After the claimer has received their attestation, they can build their credential.
 const credential = await claimer.buildCredential({
   claimerSession,
-  attestation
+  attestation,
 });
-console.log(&quot;Credential:\n\t&quot;, credential.valueOf());
+console.log(&quot;Credential:\n\t&quot;, credential.toString()());
 </code></pre>
 <p>Upon completion of an attestation session, the attester receives a <em>witness</em> which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.
 Note that an attester should store each witness and keep track of the matching claim.</p>
@@ -407,7 +407,7 @@ const presentation = await claimer.buildPresentation({
   presentationReq,
   attesterPubKey: pubKey,
 });
-console.log(&quot;Presentation:\n\t&quot;, presentation.valueOf());
+console.log(&quot;Presentation:\n\t&quot;, presentation.toString()());
 
 // The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {
@@ -457,9 +457,9 @@ const witnessToBeRevoked = new portablegabi.Witness(
 const accPostRevo = await attester.revokeAttestation({
   accumulator: accPreRevo,
   // The list of witnesses associated with the credentials which should get revoked.
-  witnesses: [witnessToBeRevoked]
+  witnesses: [witnessToBeRevoked],
 });
-console.log(&quot;Accumulator after revocation:\n\t&quot;, accPostRevo.valueOf());
+console.log(&quot;Accumulator after revocation:\n\t&quot;, accPostRevo.toString()());
 // Publish the accumulator after revocation.
 </code></pre>
 <p>After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to their newest available accumulator.
@@ -533,7 +533,7 @@ async function exec() {
   /** (1) Chain phase */
   // (1.1) Connect to the chain.
   const chain = await portablegabi.connect({
-    pgabiModName: &quot;portablegabiPallet&quot;,
+    pgabiModName: &quot;portablegabi&quot;,
   });
   console.log(&quot;Successfully connected to the chain&quot;);
 
@@ -556,8 +556,8 @@ async function exec() {
   console.log(&quot;\t Waiting for next block to have the accumulator on the chain&quot;);
   console.log(
     &quot;Latest accumulator === accPreRevo? Expected true, received&quot;,
-    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
-      accPreRevo.valueOf()
+    (await chain.getLatestAccumulator(attester.address)).toString()() ===
+      accPreRevo.toString()()
   );
 
   /** (2) Attestation phase */
@@ -619,8 +619,8 @@ async function exec() {
   // Check whether accPostRevo is the latest accumulator on chain.
   console.log(
     &quot;Latest accumulator === accPostRevo? Expected true, received&quot;,
-    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
-      accPostRevo.valueOf()
+    (await chain.getLatestAccumulator(attester.address)).toString()() ===
+      accPostRevo.toString()()
   );
 
   /** (4) Verification phase */
