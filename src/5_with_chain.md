@@ -18,6 +18,7 @@ In order to use that, just clone and set up the [`portablegabi-node`](https://gi
 git clone https://github.com/KILTprotocol/portablegabi-node.git
 cd portablegabi-node
 ./scripts/init.sh
+./scripts/build.sh
 cargo build
 ```
 
@@ -35,6 +36,14 @@ cargo run -- --dev
 The purpose of the chain is to both store each attester's accumulator and give access to old revisions, as these are required when updating older credentials.
 Therefore, we have added some chain functionality to both the credential and attester classes.
 
+## AttesterChain
+
+We extended the attester identity in a sub-class named `AttesterChain`.
+This class extends `Attester` by adding on-chain functionality to the identity's creation, handling of the accumulator and revocation.
+In terms of the creation, you have the choice between an [`ed25519` and a `sr25519` account key](https://wiki.polkadot.network/docs/en/learn-keys) for the chain.
+Moreover, you can build it from a [URI](https://polkadot.js.org/ui/start/keyring.derivation.html) like `//Alice`.
+When revoking a credential, the accumulator on the chain gets updated automatically.
+
 ## Example 1: Complete process for single credential with revocation
 
 In the following, we will run a complete exemplary chain process:
@@ -47,7 +56,7 @@ In the following, we will run a complete exemplary chain process:
 ```js
 const portablegabi = require("@kiltprotocol/portablegabi");
 
-const pubKey = new portablegabi.AttesterPrivateKey(
+const pubKey = new portablegabi.AttesterPublicKey(
   "<The pre-generated public key of the attester>"
 );
 const privKey = new portablegabi.AttesterPrivateKey(
@@ -66,7 +75,8 @@ async function exec() {
   const attester = await portablegabi.AttesterChain.buildFromURI(
     pubKey,
     privKey,
-    "//Alice"
+    "//Alice",
+    "ed25519"
   );
 
   // (1.3) Create a fresh accumulator.

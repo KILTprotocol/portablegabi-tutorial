@@ -52,7 +52,7 @@ const pubKey = new portablegabi.AttesterPublicKey(
   "<The pre-generated public key of the attester>"
 );
 
-// The verifier request a presentation.
+// The verifier requests a presentation.
 const {
   // Local information used to verify the presentation later.
   session: verifierSession,
