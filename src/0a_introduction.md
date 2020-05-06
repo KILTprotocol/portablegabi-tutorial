@@ -1,4 +1,4 @@
-# Introduction to Portablegabi 0.0.2
+# Introduction to Portablegabi [![NPM](https://img.shields.io/npm/v/@kiltprotocol/portablegabi)](https://www.npmjs.com/package/@kiltprotocol/portablegabi)
 
 The Portablegabi library provides an **easy to use API for signing JSON objects and for verifying and revoking these signatures**.
 This library intends to enable the claimer, who possesses the signed JSON object, to prove to a third party, called verifier, that a specific property is present inside the JSON object and that a trusted attester signed the object.

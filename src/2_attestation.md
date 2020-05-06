@@ -38,7 +38,7 @@ const attester = new portablegabi.Attester(pubKey, privKey);
 
 // Create a new accumulator (which is used for revocation).
 let accumulator = await attester.createAccumulator();
-console.log("Accumulator:\n\t", accumulator.valueOf());
+console.log("Accumulator:\n\t", accumulator.toString()());
 
 // Build a new claimer and generate a new master key.
 // const claimer = await portablegabi.Claimer.create()
@@ -50,25 +50,25 @@ const claimer = await portablegabi.Claimer.buildFromMnemonic(
 // The attester initiates the attestation session.
 const {
   message: startAttestationMsg,
-  session: attestationSession
+  session: attestationSession,
 } = await attester.startAttestation();
 
 // The claimer answers with an attestation request.
 const claim = {
   age: 15,
-  name: "George"
+  name: "George",
 };
 
 const {
   message: attestationRequest,
-  session: claimerSession
+  session: claimerSession,
 } = await claimer.requestAttestation({
   // The received attestation message.
   startAttestationMsg,
   // The claim which should get attested.
   claim,
   // The public key of the attester.
-  attesterPubKey: attester.publicKey
+  attesterPubKey: attester.publicKey,
 });
 
 // The attester should check the claim they are about to attest.
@@ -81,21 +81,21 @@ const {
   // The attestation should be sent over to the claimer.
   attestation,
   // The witness should be stored for later revocation.
-  witness
+  witness,
 } = await attester.issueAttestation({
   attestationSession,
   attestationRequest,
   // The update is used to generate a non-revocation witness.
-  accumulator
+  accumulator,
 });
-console.log("Witness:\n\t", witness.valueOf());
+console.log("Witness:\n\t", witness.toString()());
 
 // After the claimer has received their attestation, they can build their credential.
 const credential = await claimer.buildCredential({
   claimerSession,
-  attestation
+  attestation,
 });
-console.log("Credential:\n\t", credential.valueOf());
+console.log("Credential:\n\t", credential.toString()());
 ```
 
 Upon completion of an attestation session, the attester receives a _witness_ which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.
