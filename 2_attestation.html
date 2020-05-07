@@ -186,8 +186,8 @@ const privKey = new portablegabi.AttesterPrivateKey(
 const attester = new portablegabi.Attester(pubKey, privKey);
 
 // Create a new accumulator (which is used for revocation).
-let accumulator = await attester.createAccumulator();
-console.log(&quot;Accumulator:\n\t&quot;, accumulator.toString()());
+const accumulator = await attester.createAccumulator();
+console.log(&quot;Accumulator:\n\t&quot;, accumulator.toString());
 
 // Build a new claimer and generate a new master key.
 // const claimer = await portablegabi.Claimer.create()
@@ -237,14 +237,14 @@ const {
   // The update is used to generate a non-revocation witness.
   accumulator,
 });
-console.log(&quot;Witness:\n\t&quot;, witness.toString()());
+console.log(&quot;Witness:\n\t&quot;, witness.toString());
 
 // After the claimer has received their attestation, they can build their credential.
 const credential = await claimer.buildCredential({
   claimerSession,
   attestation,
 });
-console.log(&quot;Credential:\n\t&quot;, credential.toString()());
+console.log(&quot;Credential:\n\t&quot;, credential.toString());
 </code></pre>
 <p>Upon completion of an attestation session, the attester receives a <em>witness</em> which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.
 Note that an attester should store each witness and keep track of the matching claim.</p>

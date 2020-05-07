@@ -283,8 +283,8 @@ const privKey = new portablegabi.AttesterPrivateKey(
 const attester = new portablegabi.Attester(pubKey, privKey);
 
 // Create a new accumulator (which is used for revocation).
-let accumulator = await attester.createAccumulator();
-console.log(&quot;Accumulator:\n\t&quot;, accumulator.toString()());
+const accumulator = await attester.createAccumulator();
+console.log(&quot;Accumulator:\n\t&quot;, accumulator.toString());
 
 // Build a new claimer and generate a new master key.
 // const claimer = await portablegabi.Claimer.create()
@@ -334,14 +334,14 @@ const {
   // The update is used to generate a non-revocation witness.
   accumulator,
 });
-console.log(&quot;Witness:\n\t&quot;, witness.toString()());
+console.log(&quot;Witness:\n\t&quot;, witness.toString());
 
 // After the claimer has received their attestation, they can build their credential.
 const credential = await claimer.buildCredential({
   claimerSession,
   attestation,
 });
-console.log(&quot;Credential:\n\t&quot;, credential.toString()());
+console.log(&quot;Credential:\n\t&quot;, credential.toString());
 </code></pre>
 <p>Upon completion of an attestation session, the attester receives a <em>witness</em> which can be used to revoke the attestation and the claimer receives a credential with which they can generate presentations for an arbitrary amount of verifiers.
 Note that an attester should store each witness and keep track of the matching claim.</p>
@@ -408,7 +408,7 @@ const presentation = await claimer.buildPresentation({
   presentationReq,
   attesterPubKey: pubKey,
 });
-console.log(&quot;Presentation:\n\t&quot;, presentation.toString()());
+console.log(&quot;Presentation:\n\t&quot;, presentation.toString());
 
 // The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {
@@ -460,7 +460,7 @@ const accPostRevo = await attester.revokeAttestation({
   // The list of witnesses associated with the credentials which should get revoked.
   witnesses: [witnessToBeRevoked],
 });
-console.log(&quot;Accumulator after revocation:\n\t&quot;, accPostRevo.toString()());
+console.log(&quot;Accumulator after revocation:\n\t&quot;, accPostRevo.toString());
 // Publish the accumulator after revocation.
 </code></pre>
 <p>After an attester publishes a new accumulator, all claimers should update their credential attested by this specific attester to their newest available accumulator.
@@ -554,11 +554,12 @@ async function exec() {
   await attester.updateAccumulator(accPreRevo);
 
   // Check whether it has actually been added to chain.
+  // We need to wait for next block since updating the accumulator is a transaction.
   console.log(&quot;\t Waiting for next block to have the accumulator on the chain&quot;);
   console.log(
     &quot;Latest accumulator === accPreRevo? Expected true, received&quot;,
-    (await chain.getLatestAccumulator(attester.address)).toString()() ===
-      accPreRevo.toString()()
+    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
+      accPreRevo.valueOf()
   );
 
   /** (2) Attestation phase */
@@ -575,10 +576,10 @@ async function exec() {
   const claim = {
     name: &quot;George Ericson&quot;,
     age: 24,
-    drivers_license: {
+    driversLicense: {
       id: &quot;127128204193&quot;,
       category: &quot;B2&quot;,
-      licensing_authority: &quot;Berlin A52452&quot;,
+      licensingAuthority: &quot;Berlin A52452&quot;,
     },
   };
   const {
@@ -619,9 +620,12 @@ async function exec() {
   });
   // Check whether accPostRevo is the latest accumulator on chain.
   console.log(
+    &quot;\t Waiting for next block to have the updated accumulator on the chain&quot;
+  );
+  console.log(
     &quot;Latest accumulator === accPostRevo? Expected true, received&quot;,
-    (await chain.getLatestAccumulator(attester.address)).toString()() ===
-      accPostRevo.toString()()
+    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
+      accPostRevo.valueOf()
   );
 
   /** (4) Verification phase */
@@ -634,7 +638,7 @@ async function exec() {
     session: verifierSession,
     message: presentationReq,
   } = await portablegabi.Verifier.requestPresentation({
-    requestedAttributes: [&quot;age&quot;, &quot;drivers_license.category&quot;],
+    requestedAttributes: [&quot;age&quot;, &quot;driversLicense.category&quot;],
     reqUpdatedAfter: timeAtRev,
   });
 
