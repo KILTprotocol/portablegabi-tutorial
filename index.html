@@ -194,6 +194,7 @@ Thus, if a claimer wants to prove their credential has not been revoked, they pr
 <h2><a class="header" href="#architecture-of-portablegabi" id="architecture-of-portablegabi">Architecture of Portablegabi</a></h2>
 <p>Portablegabi consists of a part written in <a href="https://golang.org">Go</a> which wraps the Gabi library and can be compiled to <a href="https://webassembly.org">WASM</a>.
 The second part is a <a href="http://www.typescriptlang.org/index.html">Typescript</a> layer which uses the WASM-Module and provides an API for attestation, verification and revocation. It provides usage with and without a <a href="https://www.parity.io/substrate/">Substrate</a>-based blockchain implementing the <a href="https://github.com/KILTprotocol/portablegabi-pallet"><code>portablegabi-pallet</code></a>.</p>
+<p>Portablegabi is documented using a generated <a href="https://kiltprotocol.github.io/portablegabi/">API reference</a>.</p>
 <h2><a class="header" href="#state-of-security" id="state-of-security">State of Security</a></h2>
 <p>There has been no code audit of portablegabi or of the gabi library.
 Portablegabi is therefore experimental and provides no security guarantees.</p>
