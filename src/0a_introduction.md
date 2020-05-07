@@ -60,6 +60,8 @@ For more information about the accumulator and witness, please check out the cry
 Portablegabi consists of a part written in [Go](https://golang.org) which wraps the Gabi library and can be compiled to [WASM](https://webassembly.org).
 The second part is a [Typescript](http://www.typescriptlang.org/index.html) layer which uses the WASM-Module and provides an API for attestation, verification and revocation. It provides usage with and without a [Substrate](https://www.parity.io/substrate/)-based blockchain implementing the [`portablegabi-pallet`](https://github.com/KILTprotocol/portablegabi-pallet).
 
+Portablegabi is documented using a generated [API reference](https://kiltprotocol.github.io/portablegabi/).
+
 ## State of Security
 
 There has been no code audit of portablegabi or of the gabi library.
