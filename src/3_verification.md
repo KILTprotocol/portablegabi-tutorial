@@ -73,7 +73,7 @@ const presentation = await claimer.buildPresentation({
   presentationReq,
   attesterPubKey: pubKey,
 });
-console.log("Presentation:\n\t", presentation.toString()());
+console.log("Presentation:\n\t", presentation.toString());
 
 // The presentation is sent over to the verifier who validates the proof and extracts the claim.
 const {

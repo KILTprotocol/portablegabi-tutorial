@@ -35,7 +35,7 @@ const accPostRevo = await attester.revokeAttestation({
   // The list of witnesses associated with the credentials which should get revoked.
   witnesses: [witnessToBeRevoked],
 });
-console.log("Accumulator after revocation:\n\t", accPostRevo.toString()());
+console.log("Accumulator after revocation:\n\t", accPostRevo.toString());
 // Publish the accumulator after revocation.
 ```
 

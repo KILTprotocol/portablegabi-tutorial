@@ -87,11 +87,12 @@ async function exec() {
   await attester.updateAccumulator(accPreRevo);
 
   // Check whether it has actually been added to chain.
+  // We need to wait for next block since updating the accumulator is a transaction.
   console.log("\t Waiting for next block to have the accumulator on the chain");
   console.log(
     "Latest accumulator === accPreRevo? Expected true, received",
-    (await chain.getLatestAccumulator(attester.address)).toString()() ===
-      accPreRevo.toString()()
+    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
+      accPreRevo.valueOf()
   );
 
   /** (2) Attestation phase */
@@ -108,10 +109,10 @@ async function exec() {
   const claim = {
     name: "George Ericson",
     age: 24,
-    drivers_license: {
+    driversLicense: {
       id: "127128204193",
       category: "B2",
-      licensing_authority: "Berlin A52452",
+      licensingAuthority: "Berlin A52452",
     },
   };
   const {
@@ -152,9 +153,12 @@ async function exec() {
   });
   // Check whether accPostRevo is the latest accumulator on chain.
   console.log(
+    "\t Waiting for next block to have the updated accumulator on the chain"
+  );
+  console.log(
     "Latest accumulator === accPostRevo? Expected true, received",
-    (await chain.getLatestAccumulator(attester.address)).toString()() ===
-      accPostRevo.toString()()
+    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
+      accPostRevo.valueOf()
   );
 
   /** (4) Verification phase */
@@ -167,7 +171,7 @@ async function exec() {
     session: verifierSession,
     message: presentationReq,
   } = await portablegabi.Verifier.requestPresentation({
-    requestedAttributes: ["age", "drivers_license.category"],
+    requestedAttributes: ["age", "driversLicense.category"],
     reqUpdatedAfter: timeAtRev,
   });
 
