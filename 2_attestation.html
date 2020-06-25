@@ -5,12 +5,19 @@
         <meta charset="UTF-8">
         <title>Attestation - Portablegabi Tutorial</title>
         
+        
+
+
+        <!-- Custom HTML head -->
+        
+
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
+        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
@@ -19,8 +26,9 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
 
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
@@ -38,7 +46,7 @@
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -170,20 +178,7 @@ Then, the claimer can build their credential using the claim and the attester's 
     note right of C: The claimer builds their credential using the signature.
 </pre>
 <p>Before an attester can create attestations, they have to generate a key pair and publish their public key.</p>
-<pre><code class="language-js">const portablegabi = require(&quot;@kiltprotocol/portablegabi&quot;);
-// Build a new attester.
-// Note: generating a new key pair will take around 10-30 minutes.
-// const attester = await portablegabi.Attester.create(365, 70)
-
-// For this example you could use the provided keys.
-// Note: never use those keys in production!!!
-const pubKey = new portablegabi.AttesterPublicKey(
-  &quot;&lt;The pre-generated public key of the attester&gt;&quot;
-);
-const privKey = new portablegabi.AttesterPrivateKey(
-  &quot;&lt;The pre-generated private key of the attester&gt;&quot;
-);
-const attester = new portablegabi.Attester(pubKey, privKey);
+<pre><code class="language-js">const attester = new portablegabi.Attester(pubKey, privKey);
 
 // Create a new accumulator (which is used for revocation).
 const accumulator = await attester.createAccumulator();
@@ -291,10 +286,10 @@ Note that an attester should store each witness and keep track of the matching c
         
 
         
-        
+
         
         <script type="text/javascript">
-            window.playpen_copyable = true;
+            window.playground_copyable = true;
         </script>
         
 
