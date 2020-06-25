@@ -56,12 +56,8 @@ In the following, we will run a complete exemplary chain process:
 ```js
 const portablegabi = require("@kiltprotocol/portablegabi");
 
-const pubKey = new portablegabi.AttesterPublicKey(
-  "<The pre-generated public key of the attester>"
-);
-const privKey = new portablegabi.AttesterPrivateKey(
-  "<The pre-generated private key of the attester>"
-);
+const pubKey = new portablegabi.AttesterPublicKey("<The pre-generated public key of the attester>");
+const privKey = new portablegabi.AttesterPrivateKey("<The pre-generated private key of the attester>");
 
 async function exec() {
   /** (1) Chain phase */
@@ -72,12 +68,7 @@ async function exec() {
   console.log("Successfully connected to the chain");
 
   // (1.2) Create Alice identity.
-  const attester = await portablegabi.AttesterChain.buildFromURI(
-    pubKey,
-    privKey,
-    "//Alice",
-    "ed25519"
-  );
+  const attester = await portablegabi.AttesterChain.buildFromURI(pubKey, privKey, "//Alice", "ed25519");
 
   // (1.3) Create a fresh accumulator.
   const accPreRevo = await attester.createAccumulator();
@@ -91,16 +82,12 @@ async function exec() {
   console.log("\t Waiting for next block to have the accumulator on the chain");
   console.log(
     "Latest accumulator === accPreRevo? Expected true, received",
-    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
-      accPreRevo.valueOf()
+    (await chain.getLatestAccumulator(attester.address)).valueOf() === accPreRevo.toString()
   );
 
   /** (2) Attestation phase */
   // (2.1) The attester initiates the attestation session.
-  const {
-    message: startAttestationMsg,
-    session: attestationSession,
-  } = await attester.startAttestation();
+  const { message: startAttestationMsg, session: attestationSession } = await attester.startAttestation();
 
   // (2.2) The claimer answers with an attestation request.
   const claimer = await portablegabi.Claimer.buildFromMnemonic(
@@ -115,10 +102,7 @@ async function exec() {
       licensingAuthority: "Berlin A52452",
     },
   };
-  const {
-    message: attestationRequest,
-    session: claimerSession,
-  } = await claimer.requestAttestation({
+  const { message: attestationRequest, session: claimerSession } = await claimer.requestAttestation({
     // the received attestation message
     startAttestationMsg,
     // the claim which should get attested
@@ -152,13 +136,10 @@ async function exec() {
     accumulator: accPreRevo,
   });
   // Check whether accPostRevo is the latest accumulator on chain.
-  console.log(
-    "\t Waiting for next block to have the updated accumulator on the chain"
-  );
+  console.log("\t Waiting for next block to have the updated accumulator on the chain");
   console.log(
     "Latest accumulator === accPostRevo? Expected true, received",
-    (await chain.getLatestAccumulator(attester.address)).valueOf() ===
-      accPostRevo.valueOf()
+    (await chain.getLatestAccumulator(attester.address)).toString() === accPostRevo.toString()
   );
 
   /** (4) Verification phase */
@@ -167,10 +148,7 @@ async function exec() {
 
   // (4.1) The verifier sends a nonce and context to the claimer and requests disclosed attributes.
   // Note: The requested timestamp equals the accumulator date.
-  const {
-    session: verifierSession,
-    message: presentationReq,
-  } = await portablegabi.Verifier.requestPresentation({
+  const { session: verifierSession, message: presentationReq } = await portablegabi.Verifier.requestPresentation({
     requestedAttributes: ["age", "driversLicense.category"],
     reqUpdatedAfter: timeAtRev,
   });
@@ -186,9 +164,7 @@ async function exec() {
   // (4.3) The verifier checks the presentation for non-revocation, valid data and matching attester's public key.
 
   // We expect success because the credential is still valid in accPreRevo.
-  const {
-    verified: verifiedPreRevo,
-  } = await portablegabi.Verifier.verifyPresentation({
+  const { verified: verifiedPreRevo } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
     attesterPubKey: attester.publicKey,
@@ -200,9 +176,7 @@ async function exec() {
   );
 
   // We expect failure because the credential is invalid in accPostRevo.
-  const {
-    verified: verifiedPostRevo,
-  } = await portablegabi.Verifier.verifyPresentation({
+  const { verified: verifiedPostRevo } = await portablegabi.Verifier.verifyPresentation({
     proof: presentation,
     verifierSession,
     attesterPubKey: attester.publicKey,

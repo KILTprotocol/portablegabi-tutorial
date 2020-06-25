@@ -15,19 +15,11 @@ In order to revoke a credential, the attester needs their key pair, the witness 
 ```js
 const portablegabi = require("@kiltprotocol/portablegabi");
 
-const pubKey = new portablegabi.AttesterPrivateKey(
-  "<The pre-generated public key of the attester>"
-);
-const privKey = new portablegabi.AttesterPrivateKey(
-  "<The pre-generated private key of the attester>"
-);
+const pubKey = new portablegabi.AttesterPrivateKey("<The pre-generated public key of the attester>");
+const privKey = new portablegabi.AttesterPrivateKey("<The pre-generated private key of the attester>");
 const attester = new portablegabi.Attester(pubKey, privKey);
-const accPreRevo = new portablegabi.Accumulator(
-  "<The accumulator created during the attestation>"
-);
-const witnessToBeRevoked = new portablegabi.Witness(
-  "<The witness created during the attestation>"
-);
+const accPreRevo = new portablegabi.Accumulator("<The accumulator created during the attestation>");
+const witnessToBeRevoked = new portablegabi.Witness("<The witness created during the attestation>");
 
 // Issue attestations and store witnesses.
 const accPostRevo = await attester.revokeAttestation({

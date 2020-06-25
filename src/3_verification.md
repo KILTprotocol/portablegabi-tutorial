@@ -42,15 +42,9 @@ const claimer = await portablegabi.Claimer.buildFromMnemonic(
   "siege decrease quantum control snap ride position strategy fire point airport include"
 );
 
-const credential = new portablegabi.Credential(
-  "<The credential created during the attestation>"
-);
-const accumulator = new portablegabi.Accumulator(
-  "<The accumulator created during the attestation>"
-);
-const pubKey = new portablegabi.AttesterPublicKey(
-  "<The pre-generated public key of the attester>"
-);
+const credential = new portablegabi.Credential("<The credential created during the attestation>");
+const accumulator = new portablegabi.Accumulator("<The accumulator created during the attestation>");
+const pubKey = new portablegabi.AttesterPublicKey("<The pre-generated public key of the attester>");
 
 // The verifier requests a presentation.
 const {
