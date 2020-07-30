@@ -170,11 +170,11 @@ Then, the claimer can build their credential using the claim and the attester's 
     participant C as Claimer
 
     note left of A: The attester chooses two random numbers (context and nonce) and sends them to the claimer.
-    A->>C: Initiate Attestation
+    A-&gt;&gt;C: Initiate Attestation
     note right of C: The claimer commits on their master secret and send their claim to the attester.
-    C->>A: Attestation Request
+    C-&gt;&gt;A: Attestation Request
     note left of A: The attester validates and signs the claim and sends the signature back to the claimer.
-    A->>C: Attestation Response
+    A-&gt;&gt;C: Attestation Response
     note right of C: The claimer builds their credential using the signature.
 </pre>
 <p>Before an attester can create attestations, they have to generate a key pair and publish their public key.</p>

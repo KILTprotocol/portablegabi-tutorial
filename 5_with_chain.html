@@ -210,26 +210,29 @@ async function exec() {
   /** (1) Chain phase */
   // (1.1) Connect to the chain.
   const chain = await portablegabi.connect({
-    pgabiModName: &quot;portablegabi&quot;,
+    pgabiModName: &quot;portablegabiPallet&quot;,
   });
   console.log(&quot;Successfully connected to the chain&quot;);
 
   // (1.2) Create Alice identity.
-  const attester = await portablegabi.AttesterChain.buildFromURI(pubKey, privKey, &quot;//Alice&quot;, &quot;ed25519&quot;);
+  const attester = await portablegabi.AttesterChain.buildFromURI(pubKey, privKey, &quot;//Alice&quot;, &quot;sr25519&quot;);
 
   // (1.3) Create a fresh accumulator.
   const accPreRevo = await attester.createAccumulator();
 
   // (1.4) Put the accumulator on chain.
   console.log(&quot;Putting accumulator on the chain for Alice&quot;);
-  await attester.updateAccumulator(accPreRevo);
+  // To update the accumulator on chain, we first create a transaction.
+  const accumulatorTx = await attester.buildUpdateAccumulatorTX(accPreRevo);
+  // And send the transaction to the blockchain.
+  await chain.signAndSend(accumulatorTx, attester.keyringPair);
 
   // Check whether it has actually been added to chain.
   // We need to wait for next block since updating the accumulator is a transaction.
   console.log(&quot;\t Waiting for next block to have the accumulator on the chain&quot;);
   console.log(
     &quot;Latest accumulator === accPreRevo? Expected true, received&quot;,
-    (await chain.getLatestAccumulator(attester.address)).valueOf() === accPreRevo.toString()
+    (await chain.getLatestAccumulator(attester.address)).toString() === accPreRevo.toString()
   );
 
   /** (2) Attestation phase */
@@ -282,6 +285,11 @@ async function exec() {
     witnesses: [witness],
     accumulator: accPreRevo,
   });
+  // To update the accumulator on chain, we first create a transaction.
+  const tx = await attester.buildUpdateAccumulatorTX(accPostRevo);
+  // And send the transaction to the blockchain.
+  await chain.signAndSend(tx, attester.keyringPair);
+
   // Check whether accPostRevo is the latest accumulator on chain.
   console.log(&quot;\t Waiting for next block to have the updated accumulator on the chain&quot;);
   console.log(
@@ -340,13 +348,13 @@ async function exec() {
       attesterPubKey: attester.publicKey,
       accumulator: accPostRevo,
     })
-    .catch(() =&gt; {
-      console.log(&quot;Could not update revoked credential as expected&quot;);
+    .catch((e) =&gt; {
+      if (e.message.includes(&quot;updateCredential&quot;)) {
+        console.log(&quot;Caught expected throw when trying to update the revoked credential&quot;);
+      } else throw e;
     });
 }
-exec()
-  .catch((e) =&gt; console.log(e))
-  .finally(() =&gt; process.exit(1));
+exec().finally(() =&gt; portablegabi.disconnect());
 </code></pre>
 
                     </main>
